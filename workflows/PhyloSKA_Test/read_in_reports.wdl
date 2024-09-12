@@ -12,7 +12,7 @@ workflow baby {
     	straingst_report = straingst_report
   }
   output {
-  	String straingst_strain = reader.strraingst_top_strain
+  	String straingst_strain = eader.straingst_top_strain
   }
 }
 
