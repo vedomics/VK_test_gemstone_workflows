@@ -11,6 +11,9 @@ workflow baby {
     input:
     	straingst_report = straingst_report
   }
+  output {
+  	String straingst_strain = reader.strraingst_top_strain
+  }
 }
 
 # Tasks #
