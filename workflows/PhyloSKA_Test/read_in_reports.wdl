@@ -23,9 +23,8 @@ task reader {
 		python3 ../scripts/read_tsv.py ~{straingst_report}
 	>>>
 	output {
-
-		String straingst_top_strain = read_string("strain.txt")
-		Float straingst_top_cov = read_string("cov.txt")
+	
+		String straingst_top_strain = read_string(stdout())
 
 	}
 }
