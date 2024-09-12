@@ -29,6 +29,6 @@ task reader {
 		String straingst_top_strain = read_string("STRAIN_REF")
 	}
 	runtime{
-		docker: "3.12.6-bookworm⁠"
+		docker: "python:latest"
 	}
 }
