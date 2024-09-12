@@ -23,7 +23,7 @@ task reader {
 		python3 ../scripts/read_tsv.py ~{straingst_report}
 	>>>
 	output {
-		String straingst_top_strain = read_string(stdout())
+		String straingst_top_strain = read_string("STRAIN_REF")
 	}
 	runtime{
 		docker: "3.12.6-bookworm⁠"
