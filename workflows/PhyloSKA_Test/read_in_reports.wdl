@@ -22,14 +22,13 @@ task reader {
 	input {
 		File straingst_report
 	}
-	File STRAIN_REF = "strain.txt"
 	command <<<
-		python3 read_tsv.py ~{straingst_report} ~{STRAIN_REF}
+		python3 read_tsv.py ~{straingst_report}
 	>>>
 	output {
-		String straingst_top_strain = read_string(STRAIN_REF)
+		String straingst_top_strain = stdout()
 	}
 	runtime{
-		docker: "vkhadka/reader-test:v1.3"
+		docker: "vkhadka/reader-test:v_PRINT"
 	}
 }
