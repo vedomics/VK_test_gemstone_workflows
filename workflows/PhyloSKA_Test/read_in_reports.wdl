@@ -26,7 +26,7 @@ task reader {
 		python3 read_tsv.py ~{straingst_report}
 	>>>
 	output {
-		String straingst_top_strain = read_string("STRAIN_REF")
+		String straingst_top_strain = read_string("/usr/STRAIN_REF")
 	}
 	runtime{
 		docker: "vkhadka/reader-test:1.2"
