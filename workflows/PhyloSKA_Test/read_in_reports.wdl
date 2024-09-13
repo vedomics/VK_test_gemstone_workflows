@@ -23,7 +23,7 @@ task reader {
 		File straingst_report
 	}
 	command <<<
-	python3 <<< EOF
+		python3 <<< EOF
 	import sys
 
 	strains_to_cov = {}
