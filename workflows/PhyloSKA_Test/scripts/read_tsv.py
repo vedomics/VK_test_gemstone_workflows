@@ -17,12 +17,16 @@ with open(report_file) as infile:
 output_strain = max(strains_to_cov, key = strains_to_cov.get)
 out_cov = strains_to_cov[max(strains_to_cov, key = strains_to_cov.get)]
 
-
-with open (outfile, 'w') as f:
-	if out_cov > 0.8:
-		f.write(output_strain)
+if out_cov > 0.8:
+		print(output_strain)
 else:
-		f.write("Insufficient_COV")
+		print("Insufficient_COV")
+
+# with open (outfile, 'w') as f:
+# 	if out_cov > 0.8:
+# 		f.write(output_strain)
+# else:
+# 		f.write("Insufficient_COV")
 
 
 		
