@@ -23,12 +23,33 @@ task reader {
 		File straingst_report
 	}
 	command <<<
-		python3 read_tsv.py ~{straingst_report}
+	python3 <<< EOF
+	import sys
+
+	strains_to_cov = {}
+			
+	report_file = "~{straingst_report}"
+
+	with open(report_file) as infile:
+		next(infile) #skip headers 
+		for line in infile:
+			l=line.split('\t')
+			strains_to_cov[l[1]] = l[5]
+
+	output_strain = max(strains_to_cov, key = strains_to_cov.get)
+	out_cov = strains_to_cov[max(strains_to_cov, key = strains_to_cov.get)]
+
+	if out_cov > 0.8:
+		print(output_strain)
+	else:
+		print("Insufficient_COV")
+
+	EOF
 	>>>
 	output {
-		String straingst_top_strain = read_string("STRAIN_REF")
+		String straingst_top_strain = stdout()
 	}
 	runtime{
-		docker: "vkhadka/reader-test:v1.1"
+		docker: "python:latest"
 	}
 }
