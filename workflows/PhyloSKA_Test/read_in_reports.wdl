@@ -29,6 +29,6 @@ task reader {
 		String straingst_top_strain = read_string("STRAIN_REF")
 	}
 	runtime{
-		docker: "vkhadka/reader-test:v1"
+		docker: "vkhadka/reader-test:v1.1"
 	}
 }
