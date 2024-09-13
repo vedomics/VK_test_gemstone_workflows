@@ -12,7 +12,7 @@ workflow baby {
     	straingst_report = straingst_report
   }
   output {
-  	String straingst_strain = reader.straingst_top_strain
+  	File straingst_strain = reader.straingst_top_strain
   }
 }
 
@@ -26,7 +26,7 @@ task reader {
 		python3 ../scripts/read_tsv.py ~{straingst_report}
 	>>>
 	output {
-		String straingst_top_strain = stdout()
+		File straingst_top_strain = stdout()
 	}
 	runtime{
 		docker: "python:latest"
