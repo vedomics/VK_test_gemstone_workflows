@@ -12,7 +12,7 @@ workflow baby {
     	straingst_report = straingst_report
   }
   output {
-  	File straingst_strain = reader.straingst_top_strain
+  	String straingst_strain = reader.straingst_top_strain
   }
 }
 
@@ -23,12 +23,12 @@ task reader {
 		File straingst_report
 	}
 	command <<<
-		python3 ../scripts/read_tsv.py ~{straingst_report}
+		python3 read_tsv.py ~{straingst_report}
 	>>>
 	output {
-		File straingst_top_strain = stdout()
+		String straingst_top_strain = read_string("STRAIN_REF")
 	}
 	runtime{
-		docker: "python:latest"
+		docker: "vkhadka/reader-test:v1"
 	}
 }
