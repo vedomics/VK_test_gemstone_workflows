@@ -29,6 +29,6 @@ task reader {
 		String straingst_top_strain = stdout()
 	}
 	runtime{
-		docker: "vkhadka/reader-test:v_PRINT.1"
+		docker: "vkhadka/reader-test:multi_plat_PRINT"
 	}
 }
