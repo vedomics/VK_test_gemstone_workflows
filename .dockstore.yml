@@ -7,9 +7,9 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
-  - name: strain_to_ska
+  - name: strain_to_skf
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/strain_to_ska.wdl  # absolute path
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/strain_to_skf.wdl  # absolute path
     readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
     authors:
       - name: VK
