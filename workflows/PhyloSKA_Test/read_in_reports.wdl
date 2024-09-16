@@ -12,7 +12,7 @@ workflow read_strain {
     	straingst_report = straingst_report
   }
   output {
-  	String straingst_strain = read_straingst_report.straingst_top_strain
+  	String straingst_top_strain = read_straingst_report.straingst_top_strain
   }
 }
 
