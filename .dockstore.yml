@@ -1,9 +1,16 @@
 version: 1.2
 workflows:
-  - subclass: WDL
+  - name: read_in_reports
+    subclass: WDL
     primaryDescriptorPath: /workflows/PhyloSKA_Test/read_in_reports.wdl  # absolute path
     readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
-  - subclass: WDL
+  - name: strain_to_ska
+    subclass: WDL
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/strain_to_ska.wdl  # absolute path
+    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
