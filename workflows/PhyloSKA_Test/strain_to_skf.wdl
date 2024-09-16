@@ -64,7 +64,7 @@ task SKA_fastq {
 		ska summary ~{skf_path}.skf > ~{skf_summary}
 	>>>
 	output {
-		File skf_file = glob(*.skf)[0]
+		File skf_file = glob("*.skf")[0]
 		File skf_summary = skf_summary
 	}
 	runtime {
