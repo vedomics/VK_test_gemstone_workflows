@@ -7,6 +7,7 @@ workflow SKA_dists {
     email: "vkhadka@broadinstitute.org"
 	}
   input {
+        File straingst_report
 	File fastq_read1
 	File fastq_read2
 	String samplename
