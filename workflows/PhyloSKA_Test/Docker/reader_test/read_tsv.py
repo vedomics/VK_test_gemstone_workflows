@@ -7,7 +7,6 @@ strains_to_cov = {}
 #report_file = "~{straingst_report}"
 report_file = sys.argv[1]
 outfile = "STRAIN_REF"
-# outfile = sys.argv[2]
 
 with open(report_file, 'r') as infile:
 	next(infile) #skip headers 
@@ -19,13 +18,13 @@ with open(report_file, 'r') as infile:
 output_strain = max(strains_to_cov, key = strains_to_cov.get)
 out_cov = strains_to_cov[max(strains_to_cov, key = strains_to_cov.get)]
 
-if float(out_cov) > 0.8:
-	print(output_strain)
-else:
-	print("Insufficient_COV")
+# if float(out_cov) > 0.8:
+# 	print(output_strain)
+# else:
+# 	print("Insufficient_COV")
 
-# with open (outfile, 'w') as f:
-# 	if out_cov > 0.8:
-# 		f.write(output_strain)
-# 	else:
-# 		f.write("Insufficient_COV")
+with open (outfile, 'w') as f:
+	if out_cov > 0.8:
+		f.write(output_strain)
+	else:
+		f.write("Insufficient_COV")
