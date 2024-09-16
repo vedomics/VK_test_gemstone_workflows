@@ -23,7 +23,7 @@ task reader {
 		File straingst_report
 	}
 	command <<<
-		python3 read_tsv.py ~{straingst_report}
+		python3 /app/read_tsv.py ~{straingst_report}
 	>>>
 	output {
 		String straingst_top_strain = stdout()
