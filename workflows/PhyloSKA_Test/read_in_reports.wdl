@@ -1,13 +1,13 @@
 version 1.0
 
-workflow baby {
+workflow read_strain {
  meta {
-    author: "Veda Suffers"
+    author: "Veda Khadka"
 	}
 	input {
 		File straingst_report
 	}
-  call reader {
+  call straingst_strain {
     input:
     	straingst_report = straingst_report
   }
@@ -18,7 +18,7 @@ workflow baby {
 
 # Tasks #
 
-task reader {	
+task straingst_strain {	
 	input {
 		File straingst_report
 	}
