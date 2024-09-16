@@ -7,18 +7,18 @@ workflow read_strain {
 	input {
 		File straingst_report
 	}
-  call straingst_strain {
+  call read_straingst_report {
     input:
     	straingst_report = straingst_report
   }
   output {
-  	String straingst_strain = straingst_strain.straingst_top_strain
+  	String straingst_strain = read_straingst_report.straingst_top_strain
   }
 }
 
 # Tasks #
 
-task straingst_strain {	
+task read_straingst_report {	
 	input {
 		File straingst_report
 	}
