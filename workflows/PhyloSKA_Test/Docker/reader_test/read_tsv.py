@@ -7,6 +7,7 @@ strains_to_cov = {}
 #report_file = "~{straingst_report}"
 report_file = sys.argv[1]
 outfile = "STRAIN_REF"
+cov_file = "STRAIN_COV"
 
 with open(report_file, 'r') as infile:
 	next(infile) #skip headers 
