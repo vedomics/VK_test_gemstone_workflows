@@ -23,7 +23,7 @@ workflow read_strain {
 task read_straingst_report {	
 	input {
 		File straingst_report
-		Float covg_cutoff
+		Float? covg_cutoff
 	}
 	Float covg_cutoff_actual = select_first([covg_cutoff,0.8])
 	command <<<
