@@ -22,8 +22,7 @@ workflow SKA_dists {
     input:
         fq1 = fastq_read1,
         fq2 = fastq_read2,
-        samplename = samplename,
-        covg_cutoff = coverage_cutoff
+        samplename = samplename
   }
 
   output {
