@@ -6,7 +6,7 @@ strains_to_cov = {}
 		
 #report_file = "~{straingst_report}"
 report_file = sys.argv[1]
-coverage_cutoff = sys.argv[2]
+coverage_cutoff = float(sys.argv[2])
 outfile = "STRAIN_REF"
 cov_file = "STRAIN_COV"
 

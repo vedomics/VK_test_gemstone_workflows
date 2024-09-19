@@ -9,13 +9,11 @@ workflow read_strain {
 		String QC_check
 		Float? coverage_cutoff
 	}
-	if (QC_check == "QC_PASS") {
-	  call read_straingst_report {
+  	call read_straingst_report {
 	    input:
 	    	straingst_report = straingst_report,
 	    	covg_cutoff = coverage_cutoff
 	  }
-  	}
   output {
   	String straingst_top_strain = read_straingst_report.straingst_top_strain
   }
