@@ -15,7 +15,7 @@ workflow read_strain {
 	    	straingst_report = straingst_report,
 	    	covg_cutoff = coverage_cutoff
 	  }
-  }
+  	}
   output {
   	String straingst_top_strain = read_straingst_report.straingst_top_strain
   }
