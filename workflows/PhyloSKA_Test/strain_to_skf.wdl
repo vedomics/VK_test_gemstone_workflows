@@ -11,6 +11,7 @@ workflow SKA_dists {
 	File fastq_read1
 	File fastq_read2
 	String samplename
+	Float? coverage_cutoff
 	}
   call read_straingst_report {
     input:
