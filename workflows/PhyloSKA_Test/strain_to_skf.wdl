@@ -22,6 +22,7 @@ workflow SKA_dists {
         fq1 = fastq_read1,
         fq2 = fastq_read2,
         samplename = samplename
+        covg_cutoff = coverage_cutoff
   }
 
   output {
@@ -37,8 +38,9 @@ task read_straingst_report {
 	input {
 		File straingst_report
 	}
+	Float covg_cutoff_actual = select_first([covg_cutoff,0.8])
 	command <<<
-		python3 /app/read_tsv.py ~{straingst_report}
+		python3 /app/read_tsv.py ~{straingst_report} ~{covg_cutoff_actual}
 	>>>
 	output {
 		String straingst_top_strain = read_string("STRAIN_REF")

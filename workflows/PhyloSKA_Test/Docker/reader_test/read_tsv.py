@@ -6,6 +6,7 @@ strains_to_cov = {}
 		
 #report_file = "~{straingst_report}"
 report_file = sys.argv[1]
+coverage_cutoff = sys.argv[2]
 outfile = "STRAIN_REF"
 cov_file = "STRAIN_COV"
 
@@ -25,7 +26,7 @@ out_cov = strains_to_cov[max(strains_to_cov, key = strains_to_cov.get)]
 # 	print("Insufficient_COV")
 
 with open (outfile, 'w') as f:
-	if float(out_cov) > 0.8:
+	if float(out_cov) > coverage_cutoff:
 		f.write(output_strain)
 	else:
 		f.write("Insufficient_COV")
