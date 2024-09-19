@@ -16,6 +16,7 @@ workflow SKA_dists {
   call read_straingst_report {
     input:
     	straingst_report = straingst_report
+	covg_cutoff = coverage_cutoff
     }
   call SKA_fastq {
     input:
@@ -37,6 +38,7 @@ workflow SKA_dists {
 task read_straingst_report {	
 	input {
 		File straingst_report
+		Float? covg_cutoff
 	}
 	Float covg_cutoff_actual = select_first([covg_cutoff,0.8])
 	command <<<
