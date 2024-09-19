@@ -15,8 +15,8 @@ workflow SKA_dists {
 	}
   call read_straingst_report {
     input:
-    	straingst_report = straingst_report
-	covg_cutoff = coverage_cutoff
+    	straingst_report = straingst_report,
+    	covg_cutoff = coverage_cutoff
     }
   call SKA_fastq {
     input:
