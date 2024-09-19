@@ -5,7 +5,7 @@ workflow read_strain {
     author: "Veda Khadka"
 	}
 	input {
-		File straingst_report
+		File straingst_report,
 		Float? coverage_cutoff
 	}
   call read_straingst_report {
