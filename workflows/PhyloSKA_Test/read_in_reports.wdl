@@ -6,7 +6,6 @@ workflow read_strain {
 	}
 	input {
 		File straingst_report
-		String QC_check
 		Float? coverage_cutoff
 	}
   	call read_straingst_report {
