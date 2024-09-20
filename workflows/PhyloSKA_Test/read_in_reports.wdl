@@ -34,5 +34,6 @@ task read_straingst_report {
 	}
 	runtime{
 		docker: "vkhadka/reader-test:multi_V1"
+		memory: "1 GB"
 	}
 }
