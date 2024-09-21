@@ -48,7 +48,6 @@ task read_straingst_report {
 	}
 	runtime{
 		docker: "vkhadka/reader-test:multi_V1"
-		memory: "1 GB"
 	}
 }
 
@@ -74,7 +73,6 @@ task SKA_fastq {
 	}
 	runtime {
 	    docker: "staphb/ska:latest"
-	    memory: "1 GB"
 	}
 }
 
