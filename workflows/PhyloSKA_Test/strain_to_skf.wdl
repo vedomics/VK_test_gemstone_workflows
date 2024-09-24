@@ -73,6 +73,7 @@ task SKA_fastq {
 	}
 	runtime {
 	    docker: "staphb/ska:latest"
+	    mem: "3 GB"
 	}
 }
 
