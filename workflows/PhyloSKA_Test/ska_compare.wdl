@@ -51,7 +51,6 @@ task ska_distance_matrix {
 
             echo ~{filter_params_actual} > ~{params_file}
             skf_array=(~{sep=" " skf_report})
-            echo ${skf_array[@]}
             for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
             ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{strain_name}
 
