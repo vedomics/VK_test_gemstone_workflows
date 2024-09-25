@@ -66,7 +66,7 @@ task ska_distance_matrix {
 	}
 	runtime {
 	    docker:"staphb/ska:latest"
-        memory: "30 GB"
+        memory: "80 GB"
         cpu: 4
 	}
 }
