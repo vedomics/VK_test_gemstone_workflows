@@ -45,7 +45,7 @@ task ska_distance_matrix {
 	String filter_params_actual = select_first([filter_params, "NA"])
 	String params_file = "params.txt"
 	String skf_filelist = "all_skf_files.txt"
-    String strain_name = strains[0]
+    String strain_name = select_first(filter_params, strains[0])
 
 	command <<<
 
