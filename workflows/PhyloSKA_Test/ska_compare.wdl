@@ -8,6 +8,7 @@ workflow SKA_compare_samples {
   input {
     Array[File] skf_report
     Array[String] straingst_strain
+    Array[String] samplenames
     Float? Identity_cutoff
     Int? SNP_cutoff
     String? Filtering_Params_Used_to_Generate_Set
@@ -16,6 +17,7 @@ workflow SKA_compare_samples {
     input:
     	skf_report = skf_report,
     	strains = straingst_strain,
+        samples = samplenames,
     	filter_params = Filtering_Params_Used_to_Generate_Set,
     	id_cutoff = Identity_cutoff,
     	snp_cutoff = SNP_cutoff
@@ -35,6 +37,7 @@ task ska_distance_matrix {
 	input {
 	    Array[File] skf_report
 	    Array[String] strains
+        Array[String] samples
 	    Int? snp_cutoff
 	    Float? id_cutoff
         String? filter_params
@@ -50,8 +53,8 @@ task ska_distance_matrix {
 	command <<<
 
             echo ~{filter_params_actual} > ~{params_file}
-            skf_array=(~{sep=" " skf_report})
-            for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
+            skf_array=(~{sep=" " samples})
+            for i in ${skf_array[@]}; do echo $i"_k15.skf" >> ~{skf_filelist}; done #NOT GOING TO WORK
             ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{strain_name}
 
 	>>>
@@ -65,7 +68,7 @@ task ska_distance_matrix {
 	}
 	runtime {
 	    docker:"staphb/ska:latest"
-        memory: "250 GB"
-        disk: "250 GB"
+        memory: "64 GB"
+        disks: "local-disk 100 HDD"
 	}
 }
