@@ -52,15 +52,15 @@ task ska_distance_matrix {
             echo ~{filter_params_actual} > ~{params_file}
             skf_array=(~{sep=" " skf_report})
             for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
-            ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{filter_params_actual}
+            ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{strain_name}
 
 	>>>
 
 	output {
         File params = "params.txt"
-        File skf_distances_file = "~{filter_params_actual}.distances.tsv"
-        File skf_clusters_file = "~{filter_params_actual}.clusters.tsv"
-        File skf_dot_file = "~{filter_params_actual}.dot"
+        File skf_distances_file = "~{strain_name}.distances.tsv"
+        File skf_clusters_file = "~{strain_name}.clusters.tsv"
+        File skf_dot_file = "~{strain_name}.dot"
 
 	}
 	runtime {
