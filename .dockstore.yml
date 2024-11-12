@@ -21,3 +21,10 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
+  - name: ska_fasta
+    subclass: WDL
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/ska_fasta.wdl  # absolute path
+    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
