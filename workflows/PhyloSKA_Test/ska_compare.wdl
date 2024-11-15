@@ -65,7 +65,7 @@ task ska_distance_matrix {
 	}
 	runtime {
 	    docker:"staphb/ska:latest"
-        memory: "64 GB"
-        disks: "local-disk 100 HDD"
+        memory: "150 GB"
+        disks: "local-disk 200 HDD"
 	}
 }
