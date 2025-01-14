@@ -33,7 +33,7 @@ workflow bakta {
 
   output {
     File bakta_embl
-    File bakta_faa 
+    File bakta_faa
     File bakta_ffn
     File bakta_fna
     File bakta_gbff
