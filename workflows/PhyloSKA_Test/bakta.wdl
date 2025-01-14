@@ -32,16 +32,16 @@ workflow bakta {
     }
 
   output {
-    File bakta_embl = "~{samplename}/~{samplename}.embl"
-    File bakta_faa = "~{samplename}/~{samplename}.faa"
-    File bakta_ffn = "~{samplename}/~{samplename}.ffn"
-    File bakta_fna = "~{samplename}/~{samplename}.fna"
-    File bakta_gbff = "~{samplename}/~{samplename}.gbff"
-    File bakta_gff3 = "~{samplename}/~{samplename}.gff"
-    File bakta_hypotheticals_faa = "~{samplename}/~{samplename}.hypotheticals.faa"
-    File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
-    File bakta_tsv = "~{samplename}/~{samplename}.tsv"
-    File bakta_txt = "~{samplename}/~{samplename}.txt"
+    File bakta_embl
+    File bakta_faa 
+    File bakta_ffn
+    File bakta_fna
+    File bakta_gbff
+    File bakta_gff3
+    File bakta_hypotheticals_faa
+    File bakta_hypotheticals_tsv
+    File bakta_tsv
+    File bakta_txt
   }
 
 }
@@ -91,16 +91,16 @@ task bakta {
   
   >>>
   output {
-    File bakta_embl = "~{samplename}/~{samplename}.embl"
-    File bakta_faa = "~{samplename}/~{samplename}.faa"
-    File bakta_ffn = "~{samplename}/~{samplename}.ffn"
-    File bakta_fna = "~{samplename}/~{samplename}.fna"
-    File bakta_gbff = "~{samplename}/~{samplename}.gbff"
-    File bakta_gff3 = "~{samplename}/~{samplename}.gff"
-    File bakta_hypotheticals_faa = "~{samplename}/~{samplename}.hypotheticals.faa"
-    File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
-    File bakta_tsv = "~{samplename}/~{samplename}.tsv"
-    File bakta_txt = "~{samplename}/~{samplename}.txt"
+    File bakta_embl = "~{samplename}.embl"
+    File bakta_faa = "~{samplename}.faa"
+    File bakta_ffn = "~{samplename}.ffn"
+    File bakta_fna = "~{samplename}.fna"
+    File bakta_gbff = "~{samplename}.gbff"
+    File bakta_gff3 = "~{samplename}.gff"
+    File bakta_hypotheticals_faa = "~{samplename}.hypotheticals.faa"
+    File bakta_hypotheticals_tsv = "~{samplename}.hypotheticals.tsv"
+    File bakta_tsv = "~{samplename}.tsv"
+    File bakta_txt = "~{samplename}.txt"
 
   }
   runtime {
