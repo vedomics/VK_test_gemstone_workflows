@@ -32,16 +32,16 @@ workflow bakta {
     }
 
   output {
-    File bakta_embl
-    File bakta_faa
-    File bakta_ffn
-    File bakta_fna
-    File bakta_gbff
-    File bakta_gff3
-    File bakta_hypotheticals_faa
-    File bakta_hypotheticals_tsv
-    File bakta_tsv
-    File bakta_txt
+    File bakta_embl = bakta.bakta_embl
+    File bakta_faa = bakta.bakta_faa
+    File bakta_ffn = bakta.bakta_ffn
+    File bakta_fna = bakta.bakta_fna
+    File bakta_gbff = bakta.bakta_gbff
+    File bakta_gff3 = bakta.bakta_gff3
+    File bakta_hypotheticals_faa = bakta.bakta_hypotheticals_faa
+    File bakta_hypotheticals_tsv = bakta.bakta_hypotheticals_tsv
+    File bakta_tsv = bakta.bakta_tsv
+    File bakta_txt = bakta.bakta_txt
   }
 
 }
