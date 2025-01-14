@@ -1,16 +1,36 @@
 version 1.0
 
 workflow bakta {
+ 
   meta {
     author: "Theiagen edited by VK"
     email: "vkhadka@broadinstitute.org"
   }
 
+  input {
+    File assembly
+    File bakta_db = "gs://theiagen-public-files-rp/terra/theiaprok-files/bakta_db_2022-08-29.tar.gz"
+    String samplename
+    Int cpu = 8
+    Int memory = 16
+    String docker = "quay.io/biocontainers/bakta:1.5.1--pyhdfd78af_0"
+    Int disk_size = 100
+    # Parameters 
+    #  proteins: Fasta file of trusted protein sequences for CDS annotation
+    #  prodigal_tf: Prodigal training file to use for CDS prediction
+    # bakta_opts: any additional bakta arguments
+    Boolean proteins = false
+    Boolean compliant = false
+    File? prodigal_tf
+    String? bakta_opts
+  }
+  
   call bakta {
     input:
       assembly = assembly,
       samplename = samplename
     }
+
   output {
     File bakta_embl = "~{samplename}/~{samplename}.embl"
     File bakta_faa = "~{samplename}/~{samplename}.faa"
@@ -24,8 +44,8 @@ workflow bakta {
     File bakta_txt = "~{samplename}/~{samplename}.txt"
     String bakta_version = read_string("BAKTA_VERSION")
   }
-}
 
+}
 
 task bakta {
   input {
