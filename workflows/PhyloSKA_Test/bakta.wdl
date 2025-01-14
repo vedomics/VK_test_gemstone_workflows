@@ -2,8 +2,8 @@ version 1.0
 
 workflow bakta {
   meta {
-    author: "Theiagen"
-    email: ""
+    author: "Theiagen edited by VK"
+    email: "vkhadka@broadinstitute.org"
   }
 
 call bakta {
