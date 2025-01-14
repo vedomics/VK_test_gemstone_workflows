@@ -28,3 +28,10 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
+  - name: bakta
+    subclass: WDL
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/bakta.wdl  # absolute path
+    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
