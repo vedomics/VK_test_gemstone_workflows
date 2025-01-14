@@ -42,7 +42,6 @@ workflow bakta {
     File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
     File bakta_tsv = "~{samplename}/~{samplename}.tsv"
     File bakta_txt = "~{samplename}/~{samplename}.txt"
-    String bakta_version = read_string("BAKTA_VERSION")
   }
 
 }
@@ -67,7 +66,6 @@ task bakta {
   }
   command <<<
   date | tee DATE
-  bakta --version | tee BAKTA_VERSION
   
   # Extract Bakta DB
   mkdir db
@@ -103,12 +101,12 @@ task bakta {
     File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
     File bakta_tsv = "~{samplename}/~{samplename}.tsv"
     File bakta_txt = "~{samplename}/~{samplename}.txt"
-    String bakta_version = read_string("BAKTA_VERSION")
+
   }
   runtime {
     memory: "~{memory} GB"
     cpu: cpu
-    docker: docker
+    docker: "quay.io/biocontainers/bakta:1.5.1--pyhdfd78af_0"
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3
