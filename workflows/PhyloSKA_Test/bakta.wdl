@@ -6,25 +6,25 @@ workflow bakta {
     email: "vkhadka@broadinstitute.org"
   }
 
-call bakta {
-  input:
-    assembly = assembly,
-    samplename = samplename
+  call bakta {
+    input:
+      assembly = assembly,
+      samplename = samplename
+    }
+  output {
+    File bakta_embl = "~{samplename}/~{samplename}.embl"
+    File bakta_faa = "~{samplename}/~{samplename}.faa"
+    File bakta_ffn = "~{samplename}/~{samplename}.ffn"
+    File bakta_fna = "~{samplename}/~{samplename}.fna"
+    File bakta_gbff = "~{samplename}/~{samplename}.gbff"
+    File bakta_gff3 = "~{samplename}/~{samplename}.gff"
+    File bakta_hypotheticals_faa = "~{samplename}/~{samplename}.hypotheticals.faa"
+    File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
+    File bakta_tsv = "~{samplename}/~{samplename}.tsv"
+    File bakta_txt = "~{samplename}/~{samplename}.txt"
+    String bakta_version = read_string("BAKTA_VERSION")
   }
-output {
-  File bakta_embl = "~{samplename}/~{samplename}.embl"
-  File bakta_faa = "~{samplename}/~{samplename}.faa"
-  File bakta_ffn = "~{samplename}/~{samplename}.ffn"
-  File bakta_fna = "~{samplename}/~{samplename}.fna"
-  File bakta_gbff = "~{samplename}/~{samplename}.gbff"
-  File bakta_gff3 = "~{samplename}/~{samplename}.gff"
-  File bakta_hypotheticals_faa = "~{samplename}/~{samplename}.hypotheticals.faa"
-  File bakta_hypotheticals_tsv = "~{samplename}/~{samplename}.hypotheticals.tsv"
-  File bakta_tsv = "~{samplename}/~{samplename}.tsv"
-  File bakta_txt = "~{samplename}/~{samplename}.txt"
-  String bakta_version = read_string("BAKTA_VERSION")
 }
-
 
 
 task bakta {
