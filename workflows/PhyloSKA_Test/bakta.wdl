@@ -64,16 +64,13 @@ task bakta {
     File? prodigal_tf
     String? bakta_opts
   }
+
   command <<<
   date | tee DATE
   
   # Extract Bakta DB
   mkdir db
   time tar xzvf ~{bakta_db} --strip-components=1 -C ./db
-
-  # Install amrfinderplus db
-  amrfinder_update --database db/amrfinderplus-db
-  amrfinder --database_version | tee AMRFINDER_DATABASE_VERSION
 
   bakta \
     ~{bakta_opts} \
