@@ -61,7 +61,7 @@ task fastp_trim {
 task readcount {
   input {
     File clean_fq1
-	File clean_fq2
+	  File clean_fq2
 	}
 
   command <<<
@@ -69,10 +69,13 @@ task readcount {
     read1_reads="$(grep -c "^@" ~{clean_fq1})"
     read2_reads="$(grep -c "^@" ~{clean_fq2})"
 
+     echo $read1_reads | tee READ_1
+     echo $read2_reads | tee READ_2
+
   >>>
   output {
-    Float reads1 = read_string("read1_reads")
-    Float reads2 = read_string("read2_reads")
+    Float reads1 = read_string("READ_1")
+    Float reads2 = read_string("READ_2")
   }
   runtime {
     docker: "ubuntu:latest"
