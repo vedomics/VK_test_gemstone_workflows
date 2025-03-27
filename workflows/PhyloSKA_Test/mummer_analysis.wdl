@@ -1,49 +1,50 @@
 version 1.0
 
 workflow mummer {
-	meta {
-		author: "Veda Khadka"
-		email: "vkhadka@broadinstitute.org"
-	}
-	input {
-		File assembly_1
-		File assembly_2
-		String samplename_1
-		String samplename_2
-	}
+  meta {
+    author: "Veda Khadka"
+    email: "vkhadka@broadinstitute.org"
+  }
+  input {
+    Array[File] comparison_assemblies
+    Array[String] samplenames
+  }
 
-	call mummer {
-		input:
-			assembly_1 = assembly_1,
-			assembly_2 = assembly_2,
-			sample1 = samplename_1,
-			sample2 = samplename_2
-	}
+  call mummer {
+    input:
+    samples = samplenames,
+    files = comparison_assemblies
+
+  }
 
 
-	output {
-		File mummer_report = mummer.report
-	    File mummer_rpdf = mummer.rplot
-	    File mummer_fpdf = mummer.fplot
-	    File mummer_delta = mummer.delta
-	}
+  output {
+    File mummer_report = mummer.report
+      File mummer_rpdf = mummer.rplot
+      File mummer_fpdf = mummer.fplot
+      File mummer_delta = mummer.delta
+      String sample1 = mummer.sample_1
+      String sample2 = mummer.sample_2
+
+  }
 }
 
 #TASKS#
 
 task mummer {
   input {
-    File assembly_1
-    File assembly_2
-    String sample1
-    String sample2
+    Array[File] files
+    Array[String] samples
   }
+
+  String sample1 = samples[0]
+  String sample2 = samples[1]
 
    command <<<
 
-    mummer -mum -b -c ~{assembly_1} ~{assembly_2} > mummmer.mums
+    mummer -mum -b -c ~{sep=" " files} > mummmer.mums
     mummerplot -postscript -p mummer mummmer.mums
-    dnadiff ~{assembly_1} ~{assembly_2}
+    dnadiff ~{sep=" " files}
 
 
   >>>
@@ -52,6 +53,8 @@ task mummer {
     File rplot = "mummer.rplot"
     File fplot = "mummer.fplot"
     File delta = "out.delta"
+    String sample_1 = read_string(~{sample1})
+    String sample_2 = read_string(~{sample2})
     
   }
   runtime {
