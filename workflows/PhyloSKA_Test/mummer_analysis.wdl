@@ -20,8 +20,7 @@ workflow mummer {
 
   output {
     File mummer_report = mummer.report
-      File mummer_rpdf = mummer.rplot
-      File mummer_fpdf = mummer.fplot
+      File mummer_plot = mummer.plot
       File mummer_delta = mummer.delta
       String sample1 = mummer.sample_1
       String sample2 = mummer.sample_2
@@ -52,8 +51,7 @@ task mummer {
   >>>
   output {
     File report = "out.report"
-    File rplot = "mummer.rplot"
-    File fplot = "mummer.fplot"
+    File plot = "mummer.ps"
     File delta = "out.delta"
     String sample_1 = read_string("s1")
     String sample_2 = read_string("s2")
@@ -61,7 +59,7 @@ task mummer {
   }
   runtime {
     docker: "staphb/mummer:4.0.1"
-    memory: "2 GB"
+    memory: "100 GB"
     cpu: 1
     preemptible: 0
     maxRetries: 3
