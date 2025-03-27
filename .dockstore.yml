@@ -30,7 +30,7 @@ workflows:
         email: vkhadka@broadinstitute.org
   - name: mummer
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/mummer.wdl  # absolute path
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/mummer_analysis.wdl  # absolute path
     readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
     authors:
       - name: VK
