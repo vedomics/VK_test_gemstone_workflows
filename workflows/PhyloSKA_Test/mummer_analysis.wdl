@@ -45,6 +45,8 @@ task mummer {
     mummer -mum -b -c ~{sep=" " files} > mummmer.mums
     mummerplot -postscript -p mummer mummmer.mums
     dnadiff ~{sep=" " files}
+    s1="$( echo ~{sample1})"
+    s2="$( echo ~{sample2})"
 
 
   >>>
@@ -53,8 +55,8 @@ task mummer {
     File rplot = "mummer.rplot"
     File fplot = "mummer.fplot"
     File delta = "out.delta"
-    String sample_1 = read_string(~{sample1})
-    String sample_2 = read_string(~{sample2})
+    String sample_1 = read_string("s1")
+    String sample_2 = read_string("s2")
     
   }
   runtime {
