@@ -41,9 +41,8 @@ task mummer {
 
    command <<<
 
-    mummer -mum -b -c ~{sep=" " files} > mummmer.mums
-    mummerplot -postscript -p mummer mummmer.mums
     dnadiff ~{sep=" " files}
+    mummerplot --png out.delta
     s1="$( echo ~{sample1})"
     s2="$( echo ~{sample2})"
 
@@ -51,7 +50,7 @@ task mummer {
   >>>
   output {
     File report = "out.report"
-    File plot = "mummer.ps"
+    File plot = "out.png"
     File delta = "out.delta"
     String sample_1 = read_string("s1")
     String sample_2 = read_string("s2")
