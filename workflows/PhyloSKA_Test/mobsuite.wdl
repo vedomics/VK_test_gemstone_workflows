@@ -71,13 +71,13 @@ task mob_recon {
 
     # Gzip all plasmid fastas together with plasmid name appended to each contig header
 
-    touch mob_recon/plasmids.txt
+    touch mob_recon/plasmids.fasta
     for plasmid in mob_recon/~{samplename}/plasmid*.fasta.gz; do
       NAME=$(basename ${plasmid} ".fasta.gz")
-      zcat $plasmid| sed "/^>.*/ s/$/_$NAME/" >> mob_recon/plasmids.txt
+      zcat $plasmid| sed "/^>.*/ s/$/_$NAME/" >> mob_recon/plasmids.fasta
     done
 
-    tar -czvf mob_recon/plasmid_fastas.tar.gz mob_recon/plasmids.txt
+    tar -czvf plasmid_fastas.tar.gz mob_recon/plasmids.fasta
 
 
     # If the mobtyper report file does not exist, create it so that 
