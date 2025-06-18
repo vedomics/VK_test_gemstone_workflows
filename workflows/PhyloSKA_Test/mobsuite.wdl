@@ -91,7 +91,7 @@ task mob_recon {
     File mob_recon_results = "mob_recon/~{samplename}/contig_report.txt"
     File mob_typer_results = "mob_recon/~{samplename}/mobtyper_results.txt"
     File chromosome_fasta = "mob_recon/~{samplename}/chromosome.fasta.gz"
-    File plasmid_gz = "mob_recon/plasmid_fastas.tar.gz"
+    File plasmid_gz = "plasmid_fastas.tar.gz"
     String mob_recon_version = read_string("VERSION.txt")
     String mob_recon_docker = "~{docker}"
   }
