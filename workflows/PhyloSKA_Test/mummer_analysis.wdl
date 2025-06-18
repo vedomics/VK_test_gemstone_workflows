@@ -19,7 +19,7 @@ workflow mummer {
 
 
   output {
-    File mummer_report = mummer.report
+      File mummer_report = mummer.report
       File mummer_plot = mummer.plot
       File mummer_delta = mummer.delta
       String sample1 = mummer.sample_1
@@ -38,11 +38,14 @@ task mummer {
 
   String sample1 = samples[0]
   String sample2 = samples[1]
+  String file1 = files[0]
+  String file2 = files[1]
 
    command <<<
 
     dnadiff ~{sep=" " files}
-    mummerplot --png out.delta
+    mummerplot --png out.delta -R ~{file1} -Q ~{file2}
+
     s1="$( echo ~{sample1})"
     s2="$( echo ~{sample2})"
 
