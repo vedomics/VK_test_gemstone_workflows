@@ -26,7 +26,6 @@ workflow mobsuite {
     File mob_typer_results = mob_recon.mob_typer_results
     File chromosome_fasta = mob_recon.chromosome_fasta
     File plasmid_gz = mob_recon.plasmid_gz
-    Array[File] plasmid_fastas = mob_recon.plasmid_fastas
     String mob_recon_version = mob_recon.mob_recon_version
    }
   }
@@ -70,16 +69,16 @@ task mob_recon {
       gzip $fasta
     done
 
-    # Write the plasmid FASTA file paths in a text file
-    # to create an output File Array output
+    # Gzip all plasmid fastas together with plasmid name appended to each contig header
 
     touch plasmids.txt
     for plasmid in mob_recon/~{samplename}/plasmid*.fasta.gz; do
-      echo $plasmid >> plasmids.txt
+      NAME=$(basename ${plasmid} .fasta.gz)"
+      gzcat $plasmid| sed "/^>.*/ s/$/_$NAME/" >> plasmids.txt
     done
 
-    # gzip all plasmid fastas together
-    tar -czvf mob_recon/plasmid_fastas.tar.gz  mob_recon/*/plasmid*.fasta.gz
+    tar -czvf mob_recon/plasmid_fastas.tar.gz plasmids.txt
+
 
     # If the mobtyper report file does not exist, create it so that 
     # the output link does not point to an endless void
@@ -93,7 +92,6 @@ task mob_recon {
     File mob_typer_results = "mob_recon/~{samplename}/mobtyper_results.txt"
     File chromosome_fasta = "mob_recon/~{samplename}/chromosome.fasta.gz"
     File plasmid_gz = "mob_recon/plasmid_fastas.tar.gz"
-    Array[File] plasmid_fastas = read_lines("plasmids.txt")
     String mob_recon_version = read_string("VERSION.txt")
     String mob_recon_docker = "~{docker}"
   }
