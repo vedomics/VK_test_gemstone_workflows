@@ -35,6 +35,13 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
+  - name: mobsuite
+    subclass: WDL
+    primaryDescriptorPath: /workflows/PhyloSKA_Test/mobsuite.wdl  # absolute path
+    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
   - name: 2025-tutorial
     subclass: WDL
     primaryDescriptorPath: /workflows/2025-wdl-tutorial/test_workflow.wdl  # absolute path
