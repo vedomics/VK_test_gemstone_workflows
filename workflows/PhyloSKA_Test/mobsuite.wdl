@@ -74,7 +74,7 @@ task mob_recon {
     touch plasmids.txt
     for plasmid in mob_recon/~{samplename}/plasmid*.fasta.gz; do
       NAME=$(basename ${plasmid} .fasta.gz)"
-      gzcat $plasmid| sed "/^>.*/ s/$/_$NAME/" >> plasmids.txt
+      zcat $plasmid| sed "/^>.*/ s/$/_$NAME/" >> plasmids.txt
     done
 
     tar -czvf mob_recon/plasmid_fastas.tar.gz plasmids.txt
