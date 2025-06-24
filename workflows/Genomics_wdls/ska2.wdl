@@ -43,9 +43,6 @@ task ska2_build_to_distance {
 
    # create text file with filenames
 
-      touch ~{fastas_list}
-      touch names.txt
-
       fasta_array=(~{sep=" " assembly_or_chromosome})
 
       for i in ${fasta_array[@]}; do echo $i >> ~{fastas_list}; done
