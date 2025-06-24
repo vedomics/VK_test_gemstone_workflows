@@ -41,6 +41,9 @@ task ska2_build_to_distance {
 
    # create text file with filenames
 
+      touch fastas.txt
+      touch names.txt
+
       fasta_array=(~{sep=" " assembly_or_chromosome})
       for i in ${fasta_array[@]}; do echo $i >> fastas.txt ; done
 
@@ -82,7 +85,7 @@ task ska2_build_to_distance {
   }
   
   runtime {
-      docker:"staphb/ska:latest"
+        docker:"staphb/ska2:0.4.0"
         memory: "150 GB"
         disks: "local-disk 200 HDD"
   }
