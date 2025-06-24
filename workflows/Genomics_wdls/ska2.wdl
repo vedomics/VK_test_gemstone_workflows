@@ -37,22 +37,25 @@ task ska2_build_to_distance {
         String strain 
     }
 
+    File fastas_list = "fastas.txt"
+
   command <<<
 
    # create text file with filenames
 
-      touch fastas.txt
+      touch ~{fastas_list}
       touch names.txt
 
       fasta_array=(~{sep=" " assembly_or_chromosome})
-      for i in ${fasta_array[@]}; do echo $i >> fastas.txt ; done
+
+      for i in ${fasta_array[@]}; do echo $i >> ~{fastas_list}; done
+
+      mvv ~{fastas_list} ~{strain}.distance.txt
 
       #names_array=(~{sep=" " samplenames})
       #printf "%s\n" "${names[@]}" > names.txt
 
      # paste names.txt fastas.txt > ska_input_file.txt
-
-      mv fastas.txt ~{strain}.distance.txt
 
      touch ~{strain}_ska_nk_out.txt
      touch seqs.skf
@@ -93,7 +96,7 @@ task ska2_build_to_distance {
   
   runtime {
         docker:"staphb/ska2:0.4.0"
-        memory: "150 GB"
+        memory: "1 GB" # REMEMEBR TO CHANGE BACK TO 150
         disks: "local-disk 200 HDD"
   }
   
