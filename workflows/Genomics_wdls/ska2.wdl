@@ -54,7 +54,7 @@ task ska2_build_to_distance {
 
       # Run SKA nk - generates characteristics of each isolate. Need to parse in subsequent analysis
 
-      ska nk seqs.skf > ~{strain_name}_ska_nk_out.txt
+      ska nk seqs.skf > ~{strain}_ska_nk_out.txt
 
       # Run SKA distance
 
