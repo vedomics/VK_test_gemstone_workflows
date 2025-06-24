@@ -2,43 +2,50 @@ version: 1.2
 workflows:
   - name: read_in_reports
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/read_in_reports.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/read_in_reports.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
   - name: strain_to_skf
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/strain_to_skf.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/strain_to_skf.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
   - name: ska_compare
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/ska_compare.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/ska_compare.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
   - name: ska_fasta
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/ska_fasta.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/ska_fasta.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
   - name: mummer
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/mummer_analysis.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/mummer_analysis.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
   - name: mobsuite
     subclass: WDL
-    primaryDescriptorPath: /workflows/PhyloSKA_Test/mobsuite.wdl  # absolute path
-    readMePath: /workflows/PhyloSKA_Test/README.md # absolute path
+    primaryDescriptorPath: /workflows/Genomics_wdls/mobsuite.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
+  - name: ska2
+    subclass: WDL
+    primaryDescriptorPath: /workflows/Genomics_wdls/ska2.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
