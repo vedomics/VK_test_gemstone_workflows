@@ -39,15 +39,34 @@ task ska2_build_to_distance {
 
   command <<<
 
-     names_array=(~{sep=" " samplenames})
-     printf "%s\n" "${names[@]}" > names.txt
+   # create text file with filenames
 
-     touch ~{strain}.distance.txt
-     touch ~{strain}_ska_nk_out.txt
-     touch seqs.skf
-     touch ~{strain}_skalo_out_snps.vcf
-     touch strain.txt
+      fasta_array=(~{sep=" " assembly_or_chromosome})
+      for i in ${fasta_array[@]}; do echo $i >> fastas.txt ; done
 
+      names_array=(~{sep=" " samplenames})
+      printf "%s\n" "${names[@]}" > names.txt
+
+      paste names.txt fastas.txt > ska_input_file.txt
+
+      # Run SKA BUILD - generates skf file with all isolates  
+      ska_build -o seqs -f ska_input_file.txt
+
+      # Run SKA nk - generates characteristics of each isolate. Need to parse in subsequent analysis
+
+      ska nk seqs.skf > ~{strain_name}_ska_nk_out.txt
+
+      # Run SKA distance
+
+      ska distance -o ~{strain}_distance seqs.skf
+
+      # Run SKA lo
+
+      ska lo seqs.skf ~{strain}_skalo_out
+
+      # Report strain info if provided
+
+      echo ~{strain} > strain.txt
 
 
   >>>
