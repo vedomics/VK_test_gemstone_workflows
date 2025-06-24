@@ -53,7 +53,7 @@ task ska2_build_to_distance {
       paste names.txt fastas.txt > ska_input_file.txt
 
       # Run SKA BUILD - generates skf file with all isolates  
-      ska_build -o seqs -f ska_input_file.txt
+      ska build -o seqs -f ska_input_file.txt
 
       # Run SKA nk - generates characteristics of each isolate. Need to parse in subsequent analysis
 
