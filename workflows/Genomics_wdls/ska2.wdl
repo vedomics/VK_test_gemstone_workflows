@@ -37,16 +37,13 @@ task ska2_build_to_distance {
         String strain 
     }
 
-    String fastas_list = "fastas.txt"
 
   command <<<
 
    # create text file with filenames
 
       fasta_array=(~{sep=" " assembly_or_chromosome})
-      for i in ${fasta_array[@]}; do echo $i >> ~{fastas_list}; done
-
-      mvv ~{fastas_list} ~{strain}.distance.txt
+      for i in ${fasta_array[@]}; do echo $i >> ~{strain}.distance.txt; done
 
       #names_array=(~{sep=" " samplenames})
       #printf "%s\n" "${names[@]}" > names.txt
