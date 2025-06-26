@@ -42,7 +42,8 @@ task ska2_build_to_distance {
   command <<<
 
     fasta_array=(~{sep=" " assembly_or_chromosome})
-    for file in ${fasta_array[@]}; do echo $file >> fastas.txt; done
+    printf "%s\n" "${fasta_array[@]}" > fastas.txt
+    #for file in ${fasta_array[@]}; do echo $file >> fastas.txt; done
 
     names_array=(~{sep=" " samplenames})
     printf "%s\n" "${names_array[@]}" > names.txt
