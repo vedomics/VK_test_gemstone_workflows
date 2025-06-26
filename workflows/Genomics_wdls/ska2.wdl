@@ -42,12 +42,10 @@ task ska2_build_to_distance {
   command <<<
 
     fasta_array=(~{sep=" " assembly_or_chromosome})
-    for file in ${fasta_array[@]}; do 
-      echo $file >> fastas.txt
-    done
+    for file in ${fasta_array[@]}; do echo $file >> fastas.txt; done
 
     names_array=(~{sep=" " samplenames})
-    printf "%s\n" "${names[@]}" > names.txt
+    printf "%s\n" "${names_array[@]}" > names.txt
 
     paste names.txt fastas.txt > ~{strain}.distance.txt
 
@@ -61,8 +59,10 @@ task ska2_build_to_distance {
 
   output {
         File skf_distances_file = "~{strain}.distance.txt"
-        File ska_nk_out = "~{strain}_ska_nk_out.txt"
-        File skf_file = "seqs.skf"
+        File ska_nk_out = "names.txt"
+        File skf_file = "fastas.txt"
+        #File ska_nk_out = "~{strain}_ska_nk_out.txt"
+        #File skf_file = "seqs.skf"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = read_string("strain.txt")
 
