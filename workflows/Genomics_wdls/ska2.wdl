@@ -37,13 +37,19 @@ task ska2_build_to_distance {
         String strain 
     }
 
-
+  String skf_filelist = "all_skf_files.txt"
+  
   command <<<
 
     fasta_array=(~{sep=" " assembly_or_chromosome})
     for file in ${fasta_array[@]}; do 
-      echo $file >> ~{strain}.distance.txt
+      echo $file >> fastas.txt
     done
+
+    names_array=(~{sep=" " samplenames})
+    printf "%s\n" "${names[@]}" > names.txt
+
+    paste names.txt fastas.txt > ~{strain}.distance.txt
 
     touch ~{strain}_ska_nk_out.txt
     touch seqs.skf
