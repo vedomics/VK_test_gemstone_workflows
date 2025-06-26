@@ -59,7 +59,7 @@ task ska2_build_to_distance {
 
             # Run SKA distance
 
-            ska distance -o ~{strain}_distance seqs.skf
+            ska distance -o ~{strain}_distance.txt seqs.skf
 
             # Run SKA lo
 
