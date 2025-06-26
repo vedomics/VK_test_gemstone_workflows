@@ -9,12 +9,14 @@ workflow SKA_compare_samples {
     Array[String] samples
     Array[File] assembly_or_chromosome
     String straingst_strain
+    File reference
   }
   call ska2_build_to_distance {
     input:
         samplenames = samples,
         assembly_or_chromosome = assembly_or_chromosome,
         strain = straingst_strain
+        ref = reference
     }
   
   output {
@@ -23,7 +25,6 @@ workflow SKA_compare_samples {
     File ska2_skf_file = ska2_build_to_distance.skf_file
     File ska2_snps_vcf = ska2_build_to_distance.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
-    File debugging = ska2_build_to_distance.skf_filein
   }
 }
 
@@ -36,6 +37,7 @@ task ska2_build_to_distance {
         Array[String] samplenames
         Array[File] assembly_or_chromosome
         String strain 
+        File ref 
     }
 
   String skf_filelist = "all_skf_files.txt"
@@ -61,7 +63,7 @@ task ska2_build_to_distance {
 
             # Run SKA lo
 
-            ska lo seqs.skf ~{strain}_skalo_out
+            ska lo seqs.skf ~{strain}_skalo_out -r ~{ref}
 
             # Report strain info if provided
 
@@ -75,7 +77,6 @@ task ska2_build_to_distance {
         File skf_file = "~{strain}_distance_seqs.skf"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = "~{strain}"
-        File skf_filein = "ska_input_file.txt"
 
   }
   
