@@ -23,6 +23,7 @@ workflow SKA_compare_samples {
     File ska2_skf_file = ska2_build_to_distance.skf_file
     File ska2_snps_vcf = ska2_build_to_distance.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
+    File debugging = ska2_build_to_distance.skf_filein
   }
 }
 
@@ -70,12 +71,11 @@ task ska2_build_to_distance {
 
   output {
         File skf_distances_file = "~{strain}.distance.txt"
-        File ska_nk_out = "names.txt"
-        File skf_file = "fastas.txt"
-        #File ska_nk_out = "~{strain}_ska_nk_out.txt"
-        #File skf_file = "seqs.skf"
+        File ska_nk_out = ~{strain}_ska_nk_out.txt
+        File skf_file = ~{strain}_distance seqs.skf
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = read_string("strain.txt")
+        File skf_filein = "ska_input_file.txt"
 
   }
   
