@@ -43,7 +43,6 @@ task ska2_build_to_distance {
 
     fasta_array=(~{sep=" " assembly_or_chromosome})
     printf "%s\n" "${fasta_array[@]}" > fastas.txt
-    #for file in ${fasta_array[@]}; do echo $file >> fastas.txt; done
 
     names_array=(~{sep=" " samplenames})
     printf "%s\n" "${names_array[@]}" > names.txt
@@ -70,7 +69,7 @@ task ska2_build_to_distance {
   }
   
   runtime {
-        docker:"staphb/ska2:0.4.0"
+        docker:"ubuntu:latest"
         memory: "1 GB" # REMEMEBR TO CHANGE BACK TO 150
         disks: "local-disk 200 HDD"
   }
