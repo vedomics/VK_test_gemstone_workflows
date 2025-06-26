@@ -57,7 +57,7 @@ task ska2_build_to_distance {
 
             # Run SKA distance
 
-            ska distance -o ~{strain}_distance seqs.skf
+            ska distance -o ~{strain}_distance_seqs.skf
 
             # Run SKA lo
 
@@ -72,7 +72,7 @@ task ska2_build_to_distance {
   output {
         File skf_distances_file = "~{strain}.distance.txt"
         File ska_nk_out = "~{strain}_ska_nk_out.txt"
-        File skf_file = "~{strain}_distance seqs.skf"
+        File skf_file = "~{strain}_distance_seqs.skf"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = "~{strain}"
         File skf_filein = "ska_input_file.txt"
