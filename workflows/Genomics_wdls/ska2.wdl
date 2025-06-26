@@ -44,16 +44,16 @@ task ska2_build_to_distance {
 
       fasta_array=(~{sep=" " assembly_or_chromosome})
 
-      for i in ${fasta_array[@]}; do echo $i; done
+       touch ~{strain}.distance.txt
 
-      #for i in ${fasta_array[@]}; do echo $i >> ~{strain}.distance.txt; done
+      for i in ${fasta_array[@]}; do echo $i >> ~{strain}.distance.txt; done
 
     # names_array=(~{sep=" " samplenames})
     # printf "%s\n" "${names[@]}" > names.txt
 
      # paste names.txt fastas.txt > ska_input_file.txt
 
-     touch ~{strain}.distance.txt
+    
      touch ~{strain}_ska_nk_out.txt
      touch seqs.skf
      touch ~{strain}_skalo_out_snps.vcf

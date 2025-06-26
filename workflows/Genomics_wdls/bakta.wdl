@@ -15,10 +15,6 @@ workflow bakta {
     Int memory = 16
     String docker = "quay.io/biocontainers/bakta:1.5.1--pyhdfd78af_0"
     Int disk_size = 100
-    # Parameters 
-    #  proteins: Fasta file of trusted protein sequences for CDS annotation
-    #  prodigal_tf: Prodigal training file to use for CDS prediction
-    # bakta_opts: any additional bakta arguments
     Boolean proteins = false
     Boolean compliant = false
     File? prodigal_tf
@@ -55,10 +51,6 @@ task bakta {
     Int memory = 16
     String docker = "quay.io/biocontainers/bakta:1.5.1--pyhdfd78af_0"
     Int disk_size = 100
-    # Parameters 
-    #  proteins: Fasta file of trusted protein sequences for CDS annotation
-    #  prodigal_tf: Prodigal training file to use for CDS prediction
-    # bakta_opts: any additional bakta arguments
     Boolean proteins = false
     Boolean compliant = false
     File? prodigal_tf
