@@ -44,13 +44,27 @@ task ska2_build_to_distance {
             printf "%s\n" "~{sep="\n" samplenames}" >> names.txt
             printf "%s\n" "~{sep="\n" assembly_or_chromosome}" >> fastas.txt
 
-            paste names.txt fastas.txt > "~{strain}.distance.txt"
+            paste names.txt fastas.txt > ska_input_file.txt
 
+             # Run SKA BUILD - generates skf file with all isolates  
+            
+            ska build -o seqs -f ska_input_file.txt
 
-            touch ~{strain}_ska_nk_out.txt
-            touch seqs.skf
-            touch ~{strain}_skalo_out_snps.vcf
-            touch strain.txt
+            # Run SKA nk - generates characteristics of each isolate. Need to parse in subsequent analysis
+
+            ska nk seqs.skf > ~{strain}_ska_nk_out.txt
+
+            # Run SKA distance
+
+            ska distance -o ~{strain}_distance seqs.skf
+
+            # Run SKA lo
+
+            ska lo seqs.skf ~{strain}_skalo_out
+
+            # Report strain info if provided
+
+            echo ~{strain} > strain.txt
 
   >>>
 
@@ -66,8 +80,8 @@ task ska2_build_to_distance {
   }
   
   runtime {
-        docker:"ubuntu:latest"
-        memory: "1 GB" # REMEMEBR TO CHANGE BACK TO 150
+        docker:"staphb/ska2:latest"
+        memory: "8 GB" # REMEMEBR TO CHANGE BACK TO 150
         disks: "local-disk 200 HDD"
         shell: "/bin/bash"
   }
