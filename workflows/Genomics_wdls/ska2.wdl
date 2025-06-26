@@ -41,7 +41,8 @@ task ska2_build_to_distance {
 
   command <<<
 
-            printf "TEST" > names.txt
+            names_array=(~{sep=" " samplenames})
+            printf "%s\n" "${names[@]}" > names.txt
 
             touch ~{strain}_ska_nk_out.txt
             touch seqs.skf
