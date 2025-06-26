@@ -43,6 +43,8 @@ task ska2_build_to_distance {
 
             #names_array=(~{sep=" " samplenames})
             #printf "%s\n" "${names_array[@]}" > names.txt
+
+            echo "samplenames: ~{sep=',' samplenames}"
             printf "%s\n" ~{sep="\n" samplenames} > names.txt
 
             touch ~{strain}_ska_nk_out.txt
@@ -51,8 +53,6 @@ task ska2_build_to_distance {
             touch strain.txt
             touch "~{strain}.distance.txt"
             touch fastas.txt
-
-
 
   >>>
 
@@ -71,6 +71,7 @@ task ska2_build_to_distance {
         docker:"ubuntu:latest"
         memory: "1 GB" # REMEMEBR TO CHANGE BACK TO 150
         disks: "local-disk 200 HDD"
+        shell: "/bin/bash"
   }
   
 }
