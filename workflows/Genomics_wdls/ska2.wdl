@@ -41,16 +41,16 @@ task ska2_build_to_distance {
 
   command <<<
 
+            printf "%s\n" "~{sep="\n" samplenames}" >> names.txt
+            printf "%s\n" "~{sep="\n" assembly_or_chromosome}" >> fastas.txt
 
-            echo "samplenames: ~{sep=',' samplenames}"
-            printf "%s\n" "~{sep=" " samplenames}" >> names.txt
+            paste names.txt fastas.txt > "~{strain}.distance.txt"
+
 
             touch ~{strain}_ska_nk_out.txt
             touch seqs.skf
             touch ~{strain}_skalo_out_snps.vcf
             touch strain.txt
-            touch "~{strain}.distance.txt"
-            touch fastas.txt
 
   >>>
 
