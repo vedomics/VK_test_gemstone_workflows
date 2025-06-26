@@ -6,13 +6,13 @@ workflow SKA_compare_samples {
     email: "vkhadka@broadinstitute.org"
      }
   input {
-    Array[String] samplenames
+    Array[String] samples
     Array[File] assembly_or_chromosome
     String straingst_strain
   }
   call ska2_build_to_distance {
     input:
-        samplenames = samplenames,
+        samplenames = samples,
         assembly_or_chromosome = assembly_or_chromosome,
         strain = straingst_strain
     }
@@ -41,11 +41,9 @@ task ska2_build_to_distance {
 
   command <<<
 
-            #names_array=(~{sep=" " samplenames})
-            #printf "%s\n" "${names_array[@]}" > names.txt
 
             echo "samplenames: ~{sep=',' samplenames}"
-            printf "%s\n" ~{sep="\n" samplenames} > names.txt
+            printf "%s\n" "~{sep=" " samplenames}" >> names.txt
 
             touch ~{strain}_ska_nk_out.txt
             touch seqs.skf
