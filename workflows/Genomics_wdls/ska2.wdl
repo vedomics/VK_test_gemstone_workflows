@@ -15,7 +15,7 @@ workflow SKA_compare_samples {
     input:
         samplenames = samples,
         assembly_or_chromosome = assembly_or_chromosome,
-        strain = straingst_strain
+        strain = straingst_strain,
         ref = reference
     }
   
