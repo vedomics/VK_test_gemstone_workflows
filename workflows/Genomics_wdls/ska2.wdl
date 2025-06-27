@@ -80,7 +80,7 @@ task ska2_build_to_distance {
   
   runtime {
         docker:"staphb/ska2:latest"
-        memory: "8 GB" # REMEMEBR TO CHANGE BACK TO 150
+        memory: "150 GB" 
         disks: "local-disk 200 HDD"
         shell: "/bin/bash"
   }
