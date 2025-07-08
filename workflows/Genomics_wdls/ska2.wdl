@@ -76,8 +76,6 @@ task ska2_build_to_distance {
 
             echo ~{strain} > strain.txt
 
-            echo ~{filter_params_actual} > ~{params_file}
-
   >>>
 
   output {
