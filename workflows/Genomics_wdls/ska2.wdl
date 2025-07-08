@@ -10,7 +10,7 @@ workflow SKA_compare_samples {
     Array[File] assembly_or_chromosome
     String straingst_strain
     File reference
-    Float? nin_freq
+    Float? min_freq
     Int? kmer_size
     String? Filtering_Params_Used_to_Generate_Set
   }
