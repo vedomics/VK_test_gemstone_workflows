@@ -12,7 +12,6 @@ workflow SKA_compare_samples {
     File reference
     Float? min_freq
     Int? kmer_size
-    String? Filtering_Params_Used_to_Generate_Set
   }
   call ska2_build_to_distance {
     input:
@@ -21,8 +20,7 @@ workflow SKA_compare_samples {
         strain = straingst_strain,
         ref = reference,
         minfreq = min_freq,
-        kmers = kmer_size,
-        filter_params = Filtering_Params_Used_to_Generate_Set
+        kmers = kmer_size
     }
   
   output {
@@ -30,7 +28,6 @@ workflow SKA_compare_samples {
     File ska2_descriptor_stats = ska2_build_to_distance.ska_nk_out
     File ska2_snps_vcf = ska2_build_to_distance.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
-    File filtering_params = ska2_build_to_distance.params
   }
 }
 
@@ -46,14 +43,11 @@ task ska2_build_to_distance {
         File ref 
         Float? minfreq
         Int? kmers
-        String? filter_params
     }
 
   String skf_filelist = "all_skf_files.txt"
   Float minfreq_actual = select_first([minfreq,0.9])
   Int kmers_actual = select_first([kmers,31])
-  String filter_params_actual = select_first([filter_params, "NA"])
-  String params_file = "params.txt"
 
   command <<<
 
@@ -91,7 +85,6 @@ task ska2_build_to_distance {
         File ska_nk_out = "~{strain}_ska_nk_out.txt"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = "~{strain}"
-        String params = "params.txt"
   }
   
   runtime {
