@@ -10,13 +10,19 @@ workflow SKA_compare_samples {
     Array[File] assembly_or_chromosome
     String straingst_strain
     File reference
+    Float? nin-freq
+    Int? kmer_size
+    String? Filtering_Params_Used_to_Generate_Set
   }
   call ska2_build_to_distance {
     input:
         samplenames = samples,
         assembly_or_chromosome = assembly_or_chromosome,
         strain = straingst_strain,
-        ref = reference
+        ref = reference,
+        minfreq = min-freq,
+        kmers = kmer_size,
+        filter_params = Filtering_Params_Used_to_Generate_Set
     }
   
   output {
@@ -24,6 +30,7 @@ workflow SKA_compare_samples {
     File ska2_descriptor_stats = ska2_build_to_distance.ska_nk_out
     File ska2_snps_vcf = ska2_build_to_distance.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
+    File filtering_params = ska2_build_to_distance.params
   }
 }
 
@@ -37,9 +44,16 @@ task ska2_build_to_distance {
         Array[File] assembly_or_chromosome
         String strain 
         File ref 
+        Float? minfreq
+        Int? kmers
+        String? filter_params
     }
 
   String skf_filelist = "all_skf_files.txt"
+  Float minfreq_actual = select_first([minfreq,0.9])
+  Int kmers_actual = select_first([kmers,31])
+  String filter_params_actual = select_first([filter_params, "NA"])
+  String params_file = "params.txt"
 
   command <<<
 
@@ -50,7 +64,7 @@ task ska2_build_to_distance {
 
              # Run SKA BUILD - generates skf file with all isolates  
             
-            ska build -o seqs -f ska_input_file.txt
+            ska build -o seqs -k ~{kmers_actual} -f ska_input_file.txt
 
             # Run SKA nk - generates characteristics of each isolate. Need to parse in subsequent analysis
 
@@ -58,7 +72,7 @@ task ska2_build_to_distance {
 
             # Run SKA distance
 
-            ska distance -o ~{strain}_distance.txt seqs.skf
+            ska distance -o ~{strain}_distance.txt --min-freq ~{minfreq_actual} seqs.skf
 
             # Run SKA lo
 
@@ -68,6 +82,8 @@ task ska2_build_to_distance {
 
             echo ~{strain} > strain.txt
 
+            echo ~{filter_params_actual} > ~{params_file}
+
   >>>
 
   output {
@@ -75,7 +91,7 @@ task ska2_build_to_distance {
         File ska_nk_out = "~{strain}_ska_nk_out.txt"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = "~{strain}"
-
+        String params = "params.txt"
   }
   
   runtime {
