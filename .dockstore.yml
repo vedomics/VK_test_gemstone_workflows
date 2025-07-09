@@ -49,7 +49,7 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
-- name: hello
+ - name: hello
     subclass: WDL
     primaryDescriptorPath: /workflows/Genomics_wdls/hello.wdl  # absolute path
     readMePath: /workflows/Genomics_wdls/README.md # absolute path
