@@ -1,5 +1,14 @@
 version 1.0
 
+workflow test {
+  meta {
+    author: "Veda Khadka"
+    email: "vkhadka@broadinstitute.org"
+     }
+
+  call hello
+}
+
 task hello {
   command {
     echo 'Hello world!'
@@ -14,6 +23,4 @@ task hello {
   }
 }
 
-workflow test {
-  call hello
-}
+
