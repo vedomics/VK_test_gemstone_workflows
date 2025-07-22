@@ -38,10 +38,10 @@ workflow SKA_1 {
 
   call SKA1_distance {
     input:
-      String strain = strain_name,
       skf_files = SKA1_build.skf_file,
       skf_summary = SKA1_build.skf_summary,
       skf_vcf = SKA1_build.skf_vcf,
+      strain = strain_name,
       params = SKA1_build.build_parameters,
       snp_cutoff = snp_cutoff,
       identity_cutoff = identity_cutoff
