@@ -1,10 +1,5 @@
 version 1.0
 
-struct named_genome {
-  File assembly_fasta
-  String samplename
-}
-
 workflow SKA_1 {
   meta {
     author: "Veda Khadka"
@@ -12,7 +7,8 @@ workflow SKA_1 {
   }
 
   input {
-  Array[named_genome] named_genome
+  Array[File] assembly_fasta
+  Array[String] samplename
   File ref_genome
   String strain_name
   Float? minor_allele_freq
@@ -23,11 +19,11 @@ workflow SKA_1 {
   Float? snp_cutoff
   }
 
-  scatter(info in named_genome){
+  scatter(sample in zip(samplename, assembly_fasta)){
     call SKA1_build {
       input:
-      genome = info.assembly_fasta,
-      name = info.samplename,
+      genome = sample.right,
+      name = sample.left,
       ref = ref_genome,
       minor_freq = minor_allele_freq,
       kmers = kmer_size,
