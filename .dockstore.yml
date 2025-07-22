@@ -63,3 +63,10 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
+  - name: ska1
+    subclass: WDL
+    primaryDescriptorPath: /workflows/Genomics_wdls/ska1.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
