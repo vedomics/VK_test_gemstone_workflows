@@ -38,6 +38,7 @@ workflow SKA_1 {
 
   call SKA1_distance {
     input:
+      String strain = strain_name,
       skf_files = SKA1_build.skf_file,
       skf_summary = SKA1_build.skf_summary,
       skf_vcf = SKA1_build.skf_vcf,
@@ -103,10 +104,10 @@ task SKA1_build {
 
 task SKA1_distance {  
   input {
+    String strain
     Array[File] skf_files
     Array[File] skf_summary
     Array[File] skf_vcf
-    String strain_name
     Array[String] params
     Float? identity_cutoff
     Float? snp_cutoff
@@ -116,7 +117,7 @@ task SKA1_distance {
   Int snp_cutoff_actual = select_first([snp_cutoff,20])
   String skf_filelist = "all_skf_files.txt"
   String user_params = params[0]
-  String skf_distances_named = "~{strain_name}_~{user_params}"
+  String skf_distances_named = "~{strain}_~{user_params}"
 
 
 command <<<
