@@ -19,7 +19,7 @@ workflow SKA_1 {
   Float? snp_cutoff
   }
 
-  scatter(sample in zip(samplename, assembly_fasta)){
+  scatter (sample in zip(samplename, assembly_fasta)){
     call SKA1_build {
       input:
       genome = sample.right,
