@@ -7,7 +7,8 @@ workflow SKA_1 {
   }
 
   input {
-  Array[File] assembly_fasta
+  Array[File] read1_clean
+  Array[File] read2_clean
   Array[String] samplename
   File ref_genome
   String strain_name
@@ -19,11 +20,12 @@ workflow SKA_1 {
   Float? snp_cutoff
   }
 
-  scatter (sample in zip(samplename, assembly_fasta)){
+  scatter (i in range(length(samplename))) {
     call SKA1_build {
       input:
-      genome = sample.right,
-      name = sample.left,
+      fq1 = read1_clean[i],
+      fq2 = read2_clean[i],
+      name = samplename[i],
       ref = ref_genome,
       minor_freq = minor_allele_freq,
       kmers = kmer_size,
@@ -31,6 +33,7 @@ workflow SKA_1 {
       total_cutoff = total_Coverage_cutoff
     }
   }
+
 
   call SKA1_distance {
     input:
@@ -56,7 +59,8 @@ workflow SKA_1 {
 
 task SKA1_build {  
   input {
-  File genome
+  File fq1
+  File fq2
   String name
   File ref
   Float? minor_freq
@@ -75,7 +79,7 @@ task SKA1_build {
   
   command <<<
             
-            ska fasta -m ~{MAF} -k ~{kmers_actual} -c ~{total_cov} -C {file_cov} -o ~{name} ~{genome}
+            ska fasta -m ~{MAF} -k ~{kmers_actual} -c ~{total_cov} -C {file_cov} -o ~{name} ~{fq1} ~{fq2}
             ska summary ~{name}.skf > ~{skf_summary}
             ska annotate -r ~{ref} -o ~{name} ~{name}.skf
         
