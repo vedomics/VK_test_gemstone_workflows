@@ -71,7 +71,7 @@ task SKA1_build {
 
   # Tweakable parameters currently set to SKA defaults
   Float MAF = select_first([minor_freq,0.2])
-  Int kmers_actual = select_first([kmers,31])
+  Int kmers_actual = select_first([kmers,15])
   Int file_cov = select_first([file_cutoff,4])
   Int total_cov = select_first([total_cutoff,2])
   String skf_summary = "~{name}_k15_summary.txt"
