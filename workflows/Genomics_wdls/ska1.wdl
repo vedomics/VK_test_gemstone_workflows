@@ -17,7 +17,7 @@ workflow SKA_1 {
   Int? file_Coverage_cutoff
   Int? total_Coverage_cutoff
   Float? identity_cutoff
-  Float? snp_cutoff
+  Int? snp_cutoff
   }
 
   scatter (i in range(length(samplename))) {
@@ -110,7 +110,7 @@ task SKA1_distance {
     Array[File] skf_vcf
     Array[String] params
     Float? identity_cutoff
-    Float? snp_cutoff
+    Int? snp_cutoff
    }
 
   Float identity_cutoff_actual = select_first([identity_cutoff,0.9])
