@@ -79,7 +79,7 @@ task SKA1_build {
   
   command <<<
             
-            ska fasta -m ~{MAF} -k ~{kmers_actual} -c ~{total_cov} -C {file_cov} -o ~{name} ~{fq1} ~{fq2}
+            ska fastq -m ~{MAF} -k ~{kmers_actual} -c ~{total_cov} -C {file_cov} -o ~{name} ~{fq1} ~{fq2}
             ska summary ~{name}.skf > ~{skf_summary}
             ska annotate -r ~{ref} -o ~{name} ~{name}.skf
         
