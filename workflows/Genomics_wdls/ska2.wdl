@@ -23,7 +23,7 @@ workflow SKA_compare_samples {
         kmers = kmer_size
     }
   
-if (skalo = true) {
+if (skalo) {
   call ska2_skalo {
     input:
       strain = straingst_strain,
