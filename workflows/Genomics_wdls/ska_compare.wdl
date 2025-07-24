@@ -6,8 +6,8 @@ workflow SKA_compare_samples {
     email: "vkhadka@broadinstitute.org"
 	}
   input {
-    Array[File] skf_report
-    Array[String] straingst_strain
+    Array[String] samples
+    Array[File] assembly_or_chromosome
     Float? Identity_cutoff
     Int? SNP_cutoff
     String? Filtering_Params_Used_to_Generate_Set
@@ -33,8 +33,8 @@ workflow SKA_compare_samples {
 
 task ska_distance_matrix {
 	input {
-	    Array[File] skf_report
-	    Array[String] strains
+	     Array[String] samples
+        Array[File] assembly_or_chromosome
 	    Int? snp_cutoff
 	    Float? id_cutoff
         String? filter_params
@@ -48,6 +48,10 @@ task ska_distance_matrix {
     String strain_name = strains[0]
 
 	command <<<
+
+        
+
+
 
             echo ~{filter_params_actual} > ~{params_file}
             skf_array=(~{sep=" " skf_report})
