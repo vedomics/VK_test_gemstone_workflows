@@ -143,7 +143,8 @@ command <<<
             summary_array=(~{sep=" " skf_summary})
             for i in ${summary_array[@]}; do cat $i >> all_summaries_files.txt; done
             sed '1!{/^Sample/d;}' all_summaries_files.txt > all_summaries_files_clean.txt
-            tar -czf ~{skf_distances_named}_summaries.tar.gz -T all_summaries_files_clean.txt
+            mv all_summaries_files_clean.txt ~{skf_distances_named}_summaries.txt
+
   >>>
 
 
@@ -151,7 +152,7 @@ output {
         File distance_matrix = "~{skf_distances_named}.distances.tsv"
         File clusters = "~{skf_distances_named}.clusters.tsv"
         File vcfs = "~{skf_distances_named}_vcf.tar.gz"
-        File summaries = "~{skf_distances_named}_summaries.tar.gz"
+        File summaries = " ~{skf_distances_named}_summaries.txt"
 
   }
 
