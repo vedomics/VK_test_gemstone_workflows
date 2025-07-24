@@ -86,7 +86,7 @@ task ska2_build_to_distance {
   }
   
   runtime {
-        docker:"staphb/ska2:latest"
+        docker:"vkhadka/ska2:v0.4.1"
         memory: "150 GB" 
         disks: "local-disk 200 HDD"
         shell: "/bin/bash"
