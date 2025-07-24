@@ -131,17 +131,19 @@ command <<<
         # Generate vcf tarball
 
             touch all_vcf_files.txt
+            mkdir vcf_files
             vcf_array=(~{sep=" " skf_vcf})
-            for i in ${vcf_array[@]}; do echo $i >> all_vcf_files.txt; done
-            tar -czf ~{skf_distances_named}_vcf.tar.gz -T all_vcf_files.txt
+            for i in ${vcf_array[@]}; do cp $i vcf_files; done
+            tar -czf ~{skf_distances_named}_vcf.tar.gz vcf_files
 
 
         # Generate summaries tarball
 
             touch all_summaries_files.txt
             summary_array=(~{sep=" " skf_summary})
-            for i in ${summary_array[@]}; do echo $i >> all_summaries_files.txt; done
-            tar -czf ~{skf_distances_named}_summaries.tar.gz -T all_summaries_files.txt
+            for i in ${summary_array[@]}; do cat $i >> all_summaries_files.txt; done
+            sed '1!{/^Sample/d;}' all_summaries_files.txt > all_summaries_files_clean.txt
+            tar -czf ~{skf_distances_named}_summaries.tar.gz -T all_summaries_files_clean.txt
   >>>
 
 
