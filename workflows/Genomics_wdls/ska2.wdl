@@ -23,7 +23,7 @@ workflow SKA_compare_samples {
         kmers = kmer_size
     }
   
-if (!skalo) {
+if (skalo = true) {
   call ska2_skalo {
     input:
       strain = straingst_strain,
@@ -92,7 +92,7 @@ task ska2_build_to_distance {
   }
   
   runtime {
-        docker:"vkhadka/ska2:v0.4.1"
+        docker: "vkhadka/ska2:v0.4.1"
         memory: "150 GB" 
         disks: "local-disk 200 HDD"
         shell: "/bin/bash"
@@ -123,7 +123,7 @@ task ska2_skalo {
   }
 
   runtime {
-        docker:"vkhadka/ska2:v0.4.1"
+        docker: "vkhadka/ska2:v0.4.1"
         memory: "150 GB" 
         disks: "local-disk 200 HDD"
         shell: "/bin/bash"
