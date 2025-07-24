@@ -9,7 +9,8 @@ workflow SKA_compare_samples {
     Array[String] samples
     Array[File] assembly_or_chromosome
     String straingst_strain
-    File reference
+    ?File reference
+    Boolean skalo = false
     Float? min_freq
     Int? kmer_size
   }
@@ -18,11 +19,20 @@ workflow SKA_compare_samples {
         samplenames = samples,
         assembly_or_chromosome = assembly_or_chromosome,
         strain = straingst_strain,
-        ref = reference,
         minfreq = min_freq,
         kmers = kmer_size
     }
   
+if (!skalo) {
+  call ska2_skalo {
+    input:
+      strain = straingst_strain,
+      ref = reference,
+      skf = ska2_build_to_distance.skf_file
+
+  }
+}
+
   output {
     File ska2_skf_distances_file = ska2_build_to_distance.skf_distances_file
     File ska2_descriptor_stats = ska2_build_to_distance.ska_nk_out
@@ -40,7 +50,6 @@ task ska2_build_to_distance {
         Array[String] samplenames
         Array[File] assembly_or_chromosome
         String strain 
-        File ref 
         Float? minfreq
         Int? kmers
     }
@@ -68,10 +77,6 @@ task ska2_build_to_distance {
 
             ska distance -o ~{strain}_distance.txt --min-freq ~{minfreq_actual} seqs.skf
 
-            # Run SKA lo
-
-            ska lo seqs.skf ~{strain}_skalo_out -r ~{ref}
-
             # Report strain info if provided
 
             echo ~{strain} > strain.txt
@@ -83,6 +88,7 @@ task ska2_build_to_distance {
         File ska_nk_out = "~{strain}_ska_nk_out.txt"
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         String strain_name = "~{strain}"
+        File skf_file = "seqs.skf"
   }
   
   runtime {
@@ -93,3 +99,35 @@ task ska2_build_to_distance {
   }
   
 }
+
+task ska2_skalo {
+
+  input {
+        String strain 
+        File ref 
+        File skf
+  }
+
+  command <<<
+
+     # Run SKA lo
+
+      ska lo ~{skf} ~{strain}_skalo_out -r ~{ref}
+
+
+  >>>
+
+  output {
+  
+        File snps_vcf = "~{strain}_skalo_out_snps.vcf"
+  }
+
+  runtime {
+        docker:"vkhadka/ska2:v0.4.1"
+        memory: "150 GB" 
+        disks: "local-disk 200 HDD"
+        shell: "/bin/bash"
+  }
+
+}
+
