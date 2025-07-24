@@ -9,7 +9,7 @@ workflow SKA_compare_samples {
     Array[String] samples
     Array[File] assembly_or_chromosome
     String straingst_strain
-    ?File reference
+    File? reference
     Boolean skalo = false
     Float? min_freq
     Int? kmer_size
@@ -118,7 +118,7 @@ task ska2_skalo {
   >>>
 
   output {
-  
+
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
   }
 
