@@ -7,23 +7,39 @@ workflow SKA_compare_samples {
      }
   input {
     Array[String] samples
-    Array[File] assembly_or_chromosome
+    Array[File]? assembly
     String straingst_strain
     Float? min_freq
     Int? kmer_size
     # Options if you want a vcf 
     Boolean skalo = false
     File? reference
+    # option to run on chromosome
+    Boolean noMGEs = false
+    Array[File]? chromosome
 
 
   }
   call ska2_build_to_distance {
     input:
         samplenames = samples,
-        assembly_or_chromosome = assembly_or_chromosome,
+        genome= assembly,
         strain = straingst_strain,
         minfreq = min_freq,
         kmers = kmer_size
+    }
+
+    if (noMGEs) {
+      call ska2_build_to_distance {
+        input:
+            samplenames = samples,
+            genome= chromosome,
+            strain = straingst_strain,
+            minfreq = min_freq,
+            kmers = kmer_size
+    }
+
+
     }
   
     if (skalo) {
@@ -51,20 +67,20 @@ task ska2_build_to_distance {
 
   input {
         Array[String] samplenames
-        Array[File] assembly_or_chromosome
+        Array[File] genome
         String strain 
         Float? minfreq
         Int? kmers
     }
 
   String skf_filelist = "all_skf_files.txt"
-  Float minfreq_actual = select_first([minfreq,0.9])
+  Float minfreq_actual = select_first([minfreq,0])
   Int kmers_actual = select_first([kmers,31])
 
   command <<<
 
             printf "%s\n" "~{sep="\n" samplenames}" >> names.txt
-            printf "%s\n" "~{sep="\n" assembly_or_chromosome}" >> fastas.txt
+            printf "%s\n" "~{sep="\n" genome}" >> fastas.txt
 
             paste names.txt fastas.txt > ska_input_file.txt
 
