@@ -12,8 +12,9 @@ workflow SKA_compare_samples {
     Float? min_freq
     Int? kmer_size
     # Options if you want a vcf 
-    File? reference
     Boolean skalo = false
+    File? reference
+
 
   }
   call ska2_build_to_distance {
@@ -26,12 +27,11 @@ workflow SKA_compare_samples {
     }
   
     if (skalo) {
-
-    call skalo {
-      input:
-        ska2_skf = ska2_build_to_distance.skf,
-        ref = reference,
-        strain = straingst_strain
+      call skalo {
+        input:
+          ska2_skf = ska2_build_to_distance.skf,
+          ref = reference,
+          strain = straingst_strain
 
       }
     }
@@ -92,6 +92,13 @@ task ska2_build_to_distance {
         File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         File skf = "seqs.skf"
         String strain_name = "~{strain}"
+  }
+
+   runtime {
+        docker:"vkhadka/ska2:v0.4.1"
+        memory: "150 GB" 
+        disks: "local-disk 200 HDD"
+        shell: "/bin/bash"
   }
   
 }
