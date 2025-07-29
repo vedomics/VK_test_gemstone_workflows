@@ -39,7 +39,7 @@ workflow SKA_compare_samples {
   output {
     File ska2_skf_distances_file = ska2_build_to_distance.skf_distances_file
     File ska2_descriptor_stats = ska2_build_to_distance.ska_nk_out
-    File ska2_snps_vcf? = ska2_build_to_distance.snps_vcf
+    File? ska2_snps_vcf = ska2_build_to_distance.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
   }
 }
