@@ -53,7 +53,6 @@ task ska2_build_to_distance {
         Array[String] samplenames
         Array[File] assembly_or_chromosome
         String strain 
-        File ref 
         Float? minfreq
         Int? kmers
     }
