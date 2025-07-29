@@ -39,7 +39,7 @@ workflow SKA_compare_samples {
   output {
     File ska2_skf_distances_file = ska2_build_to_distance.skf_distances_file
     File ska2_descriptor_stats = ska2_build_to_distance.ska_nk_out
-    File? ska2_snps_vcf = ska2_build_to_distance.snps_vcf
+    File? ska2_snps_vcf = skalo.snps_vcf
     String ska2_strain = ska2_build_to_distance.strain_name
   }
 }
@@ -89,7 +89,6 @@ task ska2_build_to_distance {
   output {
         File skf_distances_file = "~{strain}_distance.txt"
         File ska_nk_out = "~{strain}_ska_nk_out.txt"
-        File snps_vcf = "~{strain}_skalo_out_snps.vcf"
         File skf = "seqs.skf"
         String strain_name = "~{strain}"
   }
@@ -98,7 +97,6 @@ task ska2_build_to_distance {
         docker:"vkhadka/ska2:v0.4.1"
         memory: "150 GB" 
         disks: "local-disk 200 HDD"
-        shell: "/bin/bash"
   }
   
 }
@@ -131,8 +129,7 @@ output {
  runtime {
         docker:"vkhadka/ska2:v0.4.1"
         memory: "50 GB" 
-        disks: "local-disk 200 HDD"
-        shell: "/bin/bash"
+        disks: "local-disk 50 HDD"
   }
 
 }
