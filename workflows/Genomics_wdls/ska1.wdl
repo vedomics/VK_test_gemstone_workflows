@@ -148,7 +148,6 @@ task SKA1_annotate {
 
   runtime {
       docker: "staphb/ska:latest"
-      mem: "3 GB"
       cpu: 2
       preemptible: 0
       maxRetries: 3
@@ -198,7 +197,6 @@ command <<<
 output {
         File distance_matrix = "~{skf_distances_named}.distances.tsv"
         File clusters = "~{skf_distances_named}.clusters.tsv"
-        File vcfs = "~{skf_distances_named}_vcf.tar.gz"
         File summaries = " ~{skf_distances_named}_summaries.txt"
 
   }
