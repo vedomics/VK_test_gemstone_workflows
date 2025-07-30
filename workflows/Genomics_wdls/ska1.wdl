@@ -119,6 +119,7 @@ task SKA1_annotate {
       Array[File] skf_files
       File? ref
       Array[String] params
+      String strain
   
   }
 
