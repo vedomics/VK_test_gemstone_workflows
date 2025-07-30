@@ -15,8 +15,6 @@ workflow SKA_1 {
   Int? kmer_size
   Int? file_Coverage_cutoff
   Int? total_Coverage_cutoff
-  Float? identity_cutoff
-  Int? snp_cutoff
   #Get genome positions
   Boolean generate_vcf = false
   File? ref_genome
