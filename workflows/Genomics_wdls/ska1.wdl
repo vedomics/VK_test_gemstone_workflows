@@ -34,8 +34,27 @@ workflow SKA_1 {
       file_cutoff= file_Coverage_cutoff,
       total_cutoff = total_Coverage_cutoff
     }
-  }
 
+    if (generate_vcf) {
+      call SKA1_annotate {
+        input:
+          name = samplename[i],
+          skf_file = SKA1_build.skf_file[i],
+          ref = ref_genome
+      }
+    }
+  }
+  # If this fails, then accept that you'll just have to do a loop inside the command
+
+  if (generate_vcf){
+  call SKA1_vcf {
+     input:
+          vcf_file = SKA1_annotate.skf_vcf,
+          strain = strain_name,
+          params = SKA1_build.build_parameters
+
+  }
+}
 
   call SKA1_distance {
     input:
@@ -48,27 +67,7 @@ workflow SKA_1 {
   }
 
 
-if (generate_vcf){
-  scatter (i in range(length(samplename))) {
-    call SKA1_annotate {
-      input:
-        name = samplename[i],
-        skf_file = SKA1_build.skf_file[i],
-        ref = ref_genome
-  
-    }
 
-  }
-
-  call SKA1_vcf {
-     input:
-          vcf_file = SKA1_annotate.skf_vcf,
-          strain = strain_name,
-          params = SKA1_build.build_parameters
-
-  }
-
-}
 
   output {
     File skf_summary = SKA1_distance.summaries
