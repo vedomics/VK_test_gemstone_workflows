@@ -116,7 +116,7 @@ task SKA1_annotate {
 
    input {
       Array[String] names
-      Array[file] skf_files
+      Array[File] skf_files
       File? ref
       Array[String] params
   
