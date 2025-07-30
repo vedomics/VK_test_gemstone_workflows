@@ -105,8 +105,7 @@ task SKA1_build {
 
   runtime {
       docker: "staphb/ska:latest"
-      mem: "3 GB"
-      cpu: 2
+      mem: "1 GB"
       preemptible: 0
       maxRetries: 3
   }
@@ -153,7 +152,7 @@ task SKA1_annotate {
 
   runtime {
         docker:"staphb/ska:latest"
-        memory: "150 GB"
+        memory: "100 GB"
         disks: "local-disk 200 HDD"
   }
 
