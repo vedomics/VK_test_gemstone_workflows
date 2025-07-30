@@ -34,26 +34,18 @@ workflow SKA_1 {
       file_cutoff= file_Coverage_cutoff,
       total_cutoff = total_Coverage_cutoff
     }
+}
 
-    if (generate_vcf) {
-      call SKA1_annotate {
-        input:
-          name = samplename[i],
-          skf_file = SKA1_build.skf_file[i],
-          ref = ref_genome
-      }
-    }
-  }
-  # If this fails, then accept that you'll just have to do a loop inside the command
 
   if (generate_vcf){
-  call SKA1_vcf {
-     input:
-          vcf_file = SKA1_annotate.skf_vcf,
+   call SKA1_annotate {
+        input:
+          names = samplename,
+          skf_files = SKA1_build.skf_file,
+          ref = ref_genome,
           strain = strain_name,
           params = SKA1_build.build_parameters
-
-  }
+      }
 }
 
   call SKA1_distance {
@@ -65,7 +57,6 @@ workflow SKA_1 {
       snp_cutoff = snp_cutoff,
       identity_cutoff = identity_cutoff
   }
-
 
 
 
@@ -124,32 +115,45 @@ task SKA1_build {
 task SKA1_annotate {
 
    input {
-      String name
-      File skf_file
+      Array names
+      Array skf_files
       File? ref
+      Array[String] params
   
   }
 
-      # Tweakable parameters currently set to SKA defaults
-     
-  
+    String user_params = params[0]
+    String skf_distances_named = "~{strain}_~{user_params}"
+
   command <<<
 
-            ska annotate -r ~{ref} -o ~{name} ~{name}.skf
+            skf_array=(~{sep=" " skf_files})
+            names_array=(~{sep=" " names})
+
+            mkdir vcf_files
+
+            for index in ${!skf_array[*]}; do
+              ska annotate -r ~{ref} -o ${skf_array[$index]} ${names_array[$index]}.skf
+              mv *.vcf vcf_files/;
+            done
+
+             # Generate vcf tarball
+
+            tar -czf ~{skf_distances_named}_vcf.tar.gz vcf_files
+
         
   >>>
 
   output {
 
-    File skf_vcf = "~{name}.vcf"
+    File vcfs = "~{skf_distances_named}_vcf.tar.gz"
 
   }
 
   runtime {
-      docker: "staphb/ska:latest"
-      cpu: 2
-      preemptible: 0
-      maxRetries: 3
+        docker:"staphb/ska:latest"
+        memory: "150 GB"
+        disks: "local-disk 200 HDD"
   }
 
 }
@@ -206,46 +210,7 @@ output {
         disks: "local-disk 200 HDD"
   }
 
-  }
+}
 
 
 
-task SKA1_vcf {
-
- input {
-    String strain
-    Array[File] vcf_file
-    Array[String] params
-   }
-
-  String user_params = params[0]
-  String skf_distances_named = "~{strain}_~{user_params}"
-
-  command <<<
-
-
-        # Generate vcf tarball
-
-            touch all_vcf_files.txt
-            mkdir vcf_files
-            vcf_array=(~{sep=" " vcf_file})
-            for i in ${vcf_array[@]}; do cp $i vcf_files; done
-            tar -czf ~{skf_distances_named}_vcf.tar.gz vcf_files
-
-
-  >>>
-
-output {
-
-        File vcfs = "~{skf_distances_named}_vcf.tar.gz"
-
-  }
-
-   runtime {
-        docker:"staphb/ska:latest"
-        memory: "150 GB"
-        disks: "local-disk 200 HDD"
-  }
-
-
-  }
