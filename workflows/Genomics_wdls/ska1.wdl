@@ -132,10 +132,7 @@ task SKA1_annotate {
 
             mkdir vcf_files
 
-            for index in ${!skf_array[*]}; do
-              ska annotate -r ~{ref} -o ${skf_array[$index]} ${names_array[$index]}.skf
-              mv *.vcf vcf_files/;
-            done
+            for index in ${!skf_array[*]}; do ska annotate -r ~{ref} -o ${skf_array[$index]} ${names_array[$index]}.skf && mv *.vcf vcf_files/; done
 
              # Generate vcf tarball
 
