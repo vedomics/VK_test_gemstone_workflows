@@ -147,6 +147,7 @@ task SKA1_annotate {
   output {
 
     File vcfs = "~{skf_distances_named}_vcf.tar.gz"
+    File test ="test.txt"
 
   }
 
