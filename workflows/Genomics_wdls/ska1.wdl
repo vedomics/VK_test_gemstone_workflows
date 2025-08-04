@@ -135,7 +135,10 @@ task SKA1_annotate {
 
             for index in ${!skf_array[*]}; do echo ${skf_array[$index]} >> test.txt ; done
 
-            for index in ${!skf_array[*]}; do ska annotate -r ~{ref} -o vcf_files/${skf_array[$index]} ${names_array[$index]}.skf; done
+            for index in ${!skf_array[*]}; do 
+              ska annotate -r ~{ref} -o ${names_array[$index]} ${skf_array[$index]}.skf
+              mv ${names_array[$index]}.vcf vcf_files/
+            done
 
              # Generate vcf tarball
 
