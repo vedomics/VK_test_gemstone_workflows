@@ -37,17 +37,6 @@ workflow SKA_1 {
 }
 
 
-  if (generate_vcf){
-   call SKA1_annotate {
-        input:
-          names = samplename,
-          skf_files = SKA1_build.skf_file,
-          ref = ref_genome,
-          strain = strain_name,
-          params = SKA1_build.build_parameters
-      }
-}
-
   call SKA1_distance {
     input:
       skf_files = SKA1_build.skf_file,
@@ -59,6 +48,16 @@ workflow SKA_1 {
   }
 
 
+  if (generate_vcf){
+   call SKA1_annotate {
+        input:
+          names = samplename,
+          skf_files = SKA1_build.skf_file,
+          ref = ref_genome,
+          strain = strain_name,
+          params = SKA1_build.build_parameters
+      }
+}
 
   output {
     File skf_summary = SKA1_distance.summaries
@@ -67,6 +66,7 @@ workflow SKA_1 {
     File ska_clusters = SKA1_distance.clusters
 
   }
+
 }
 
 #### Tasks ####
@@ -131,8 +131,11 @@ task SKA1_annotate {
             names_array=(~{sep=" " names})
 
             mkdir vcf_files
+            touch test.txt
 
-            for index in ${!skf_array[*]}; do ska annotate -r ~{ref} -o ${skf_array[$index]} ${names_array[$index]}.skf && mv *.vcf vcf_files/; done
+            for index in ${!skf_array[*]}; do echo ${skf_array[$index]} >> test.txt ; done
+
+            for index in ${!skf_array[*]}; do ska annotate -r ~{ref} -o vcf_files/${skf_array[$index]} ${names_array[$index]}.skf; done
 
              # Generate vcf tarball
 
