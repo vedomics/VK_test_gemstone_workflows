@@ -298,7 +298,7 @@ input {
 
   runtime {
         docker:"vkhadka/veryfasttree:v4.0.5"
-        memory: "50 GB"
+        memory: "5 GB"
         cpu: 4
         disks: "local-disk 200 HDD"
   }
