@@ -292,7 +292,7 @@ input {
 
   output {
 
-    File treefile = "~{skf_distances_named}.tre"
+    File treefile = glob("*.tre")[0]
 
   }
 
