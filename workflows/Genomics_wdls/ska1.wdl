@@ -285,14 +285,14 @@ input {
 
   command <<<
 
-    VeryFastTree -nt -gamma -gtr -threads 4 ~{aligned_skf} > ~{skf_distances_named}.tre
+    VeryFastTree -nt -gamma -gtr -threads 4 ~{aligned_skf} > ~{skf_distances_named}.txt
 
 
   >>> 
 
   output {
 
-    File treefile = glob("*.tre")[0]
+    File treefile = "~{skf_distances_named}.txt"
 
   }
 
