@@ -21,7 +21,7 @@ workflow SKA_1 {
   Boolean generate_vcf = false
   File? ref_genome
   Boolean generate_tree = false
-  Float? min_kmer_freq
+  Float? min_kmer_freq = 0.9
 
   }
 
