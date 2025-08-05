@@ -77,6 +77,7 @@ if (generate_tree) {
 }
 
   output {
+
     File skf_summary = SKA1_distance.summaries
     File? ska_vcfs = SKA1_annotate.vcfs
     File? ska_tree = build_tree.treefile
@@ -284,14 +285,14 @@ input {
 
   command <<<
 
-    VeryFastTree -nt -gamma -gtr -threads 4 ~{aligned_skf} > ~{skf_distances_named}.tree
+    VeryFastTree -nt -gamma -gtr -threads 4 ~{aligned_skf} > ~{skf_distances_named}.tre
 
 
   >>> 
 
   output {
 
-    File treefile = "~{skf_distances_named}.tree"
+    File treefile = "~{skf_distances_named}.tre"
 
   }
 
