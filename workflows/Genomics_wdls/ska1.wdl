@@ -253,7 +253,7 @@ task SKA_align {
   command <<<
 
             skf_array=(~{sep=" " skf_files})
-            ska merge -o ~{skf_distances_named}_merged skf_array
+            ska merge -o ~{skf_distances_named}_merged ${skf_array[@]}
             ska align -v -p ~{kfreq} -o ~{skf_distances_named} ~{skf_distances_named}_merged.skf
 
   >>>
