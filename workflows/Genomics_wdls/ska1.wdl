@@ -20,6 +20,8 @@ workflow SKA_1 {
   #Get genome positions
   Boolean generate_vcf = false
   File? ref_genome
+  Boolean generate_tree = false
+  Float? min_kmer_freq
 
   }
 
@@ -47,6 +49,21 @@ workflow SKA_1 {
       identity_cutoff = identity_cutoff
   }
 
+if (generate_tree) {
+  call SKA_align {
+    input:
+        skf_files = SKA1_build.skf_file,
+        strain = strain_name,
+        kmer_freq = min_kmer_freq,
+        params = SKA1_build.build_parameters
+  }
+  call build_tree {
+    input:
+      aligned_skf = SKA_align.aligned_skf,
+      strain = strain_name,
+      params = SKA1_build.build_parameters
+  }
+}
 
   if (generate_vcf){
    call SKA1_annotate {
@@ -64,6 +81,7 @@ workflow SKA_1 {
     File? ska_vcfs = SKA1_annotate.vcfs
     File ska_distance = SKA1_distance.distance_matrix
     File ska_clusters = SKA1_distance.clusters
+    File? ska_tree = build_tree.tree
 
   }
 
@@ -110,61 +128,6 @@ task SKA1_build {
       maxRetries: 3
   }
 }
-
-task SKA1_annotate {
-
-   input {
-      Array[String] names
-      Array[File] skf_files
-      File? ref
-      Array[String] params
-      String strain
-  
-  }
-
-    String user_params = params[0]
-    String skf_distances_named = "~{strain}_~{user_params}"
-
-  command <<<
-
-            skf_array=(~{sep=" " skf_files})
-            names_array=(~{sep=" " names})
-
-            mkdir vcf_files
-            touch test.txt
-
-            for index in ${!skf_array[*]}; do echo ${skf_array[$index]} >> test.txt ; done
-
-            for index in ${!skf_array[*]}; do 
-              ska annotate -r ~{ref} -o ${names_array[$index]} ${skf_array[$index]}
-              head -7 ${names_array[$index]}.vcf > ${names_array[$index]}_filt.vcf && grep 'NS5' ${names_array[$index]}.vcf >> ${names_array[$index]}_filt.vcf
-              sed -i '' '8d' ${names_array[$index]}_filt.vcf
-              mv ${names_array[$index]}_filt.vcf vcf_files/
-            done
-
-             # Generate vcf tarball
-
-            tar -czf ~{skf_distances_named}_vcf.tar.gz vcf_files
-
-        
-  >>>
-
-  output {
-
-    File vcfs = "~{skf_distances_named}_vcf.tar.gz"
-    File test ="test.txt"
-
-  }
-
-  runtime {
-        docker:"staphb/ska:latest"
-        memory: "100 GB"
-        disks: "local-disk 200 HDD"
-  }
-
-}
-
-
 
 task SKA1_distance {  
   input {
@@ -219,4 +182,127 @@ output {
 }
 
 
+# Optional tasks
 
+task SKA1_annotate {
+
+   input {
+      Array[String] names
+      Array[File] skf_files
+      File? ref
+      Array[String] params
+      String strain
+  
+  }
+
+    String user_params = params[0]
+    String skf_distances_named = "~{strain}_~{user_params}"
+
+  command <<<
+
+            skf_array=(~{sep=" " skf_files})
+            names_array=(~{sep=" " names})
+
+            mkdir vcf_files
+            touch test.txt
+
+            for index in ${!skf_array[*]}; do echo ${skf_array[$index]} >> test.txt ; done
+
+            for index in ${!skf_array[*]}; do 
+              ska annotate -r ~{ref} -o ${names_array[$index]} ${skf_array[$index]}
+              head -7 ${names_array[$index]}.vcf > ${names_array[$index]}_filt.vcf && grep 'NS5' ${names_array[$index]}.vcf >> ${names_array[$index]}_filt.vcf
+              sed -i '' '8d' ${names_array[$index]}_filt.vcf
+              mv ${names_array[$index]}_filt.vcf vcf_files/
+            done
+
+             # Generate vcf tarball
+
+            tar -czf ~{skf_distances_named}_vcf.tar.gz vcf_files
+
+        
+  >>>
+
+  output {
+
+    File vcfs = "~{skf_distances_named}_vcf.tar.gz"
+    File test ="test.txt"
+
+  }
+
+  runtime {
+        docker:"staphb/ska:latest"
+        memory: "100 GB"
+        disks: "local-disk 200 HDD"
+  }
+
+}
+
+task SKA_align {
+   input {
+      Array[File] skf_files
+      Array[String] params
+      String strain
+      Float? kmer_freq
+  
+  }
+
+    String user_params = params[0]
+    String skf_distances_named = "~{strain}_~{user_params}"
+    Float kfreq = select_first([kmer_freq,0.9])
+
+  command <<<
+
+            skf_array=(~{sep=" " skf_files})
+            ska merge -o ~{skf_distances_named}_merged skf_array
+            ska align -v -p ~{kfreq} -o ~{skf_distances_named} ~{skf_distances_named}_merged.skf
+
+  >>>
+
+  output {
+
+    File aligned_skf = "~{skf_distances_named}_variants.aln"
+
+  }
+
+  runtime {
+        docker:"staphb/ska:latest"
+        memory: "50 GB"
+        disks: "local-disk 200 HDD"
+  }
+
+}
+
+task build_tree {
+  
+input {
+      Array[String] params
+      String strain
+      File aligned_skf
+  
+  }
+
+    String user_params = params[0]
+    String skf_distances_named = "~{strain}_~{user_params}"
+
+
+  command <<<
+
+    VeryFastTree -nt -gamma -gtr -threads 4 ~{aligned_skf} > ~{skf_distances_named}.tree
+
+
+  >>> 
+
+  output {
+
+    File tree = "~{skf_distances_named}.tree"
+
+  }
+
+  runtime {
+        docker:"vkhadka/veryfasttree:v4.0.5"
+        memory: "50 GB"
+        cpu: 4
+        disks: "local-disk 200 HDD"
+  }
+
+}
