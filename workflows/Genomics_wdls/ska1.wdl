@@ -137,7 +137,9 @@ task SKA1_annotate {
 
             for index in ${!skf_array[*]}; do 
               ska annotate -r ~{ref} -o ${names_array[$index]} ${skf_array[$index]}
-              mv ${names_array[$index]}.vcf vcf_files/
+              head -7 ${names_array[$index]}.vcf > ${names_array[$index]}_filt.vcf && grep 'NS5' ${names_array[$index]}.vcf >> ${names_array[$index]}_filt.vcf
+              sed -i '' '8d' ${names_array[$index]}_filt.vcf
+              mv ${names_array[$index]}_filt.vcf vcf_files/
             done
 
              # Generate vcf tarball
