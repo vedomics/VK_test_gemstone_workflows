@@ -79,9 +79,10 @@ if (generate_tree) {
   output {
     File skf_summary = SKA1_distance.summaries
     File? ska_vcfs = SKA1_annotate.vcfs
+    File? ska_tree = build_tree.treefle
     File ska_distance = SKA1_distance.distance_matrix
     File ska_clusters = SKA1_distance.clusters
-    File? ska_tree = build_tree.tree
+
 
   }
 
@@ -204,9 +205,6 @@ task SKA1_annotate {
             names_array=(~{sep=" " names})
 
             mkdir vcf_files
-            touch test.txt
-
-            for index in ${!skf_array[*]}; do echo ${skf_array[$index]} >> test.txt ; done
 
             for index in ${!skf_array[*]}; do 
               ska annotate -r ~{ref} -o ${names_array[$index]} ${skf_array[$index]}
@@ -225,7 +223,6 @@ task SKA1_annotate {
   output {
 
     File vcfs = "~{skf_distances_named}_vcf.tar.gz"
-    File test ="test.txt"
 
   }
 
@@ -294,7 +291,7 @@ input {
 
   output {
 
-    File tree = "~{skf_distances_named}.tree"
+    File treefile = "~{skf_distances_named}.tree"
 
   }
 
