@@ -79,7 +79,7 @@ if (generate_tree) {
   output {
     File skf_summary = SKA1_distance.summaries
     File? ska_vcfs = SKA1_annotate.vcfs
-    File? ska_tree = build_tree.treefle
+    File? ska_tree = build_tree.treefile
     File ska_distance = SKA1_distance.distance_matrix
     File ska_clusters = SKA1_distance.clusters
 
