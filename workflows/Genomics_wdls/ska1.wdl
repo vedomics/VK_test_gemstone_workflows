@@ -125,7 +125,7 @@ task SKA1_build {
 
   runtime {
       docker: "staphb/ska:latest"
-      mem: "800 MB"
+      mem: "2 GB"
       preemptible: 0
       maxRetries: 3
   }
