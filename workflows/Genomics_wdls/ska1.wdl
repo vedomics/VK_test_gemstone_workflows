@@ -177,7 +177,7 @@ output {
 
    runtime {
         docker:"staphb/ska:latest"
-        memory: "150 GB"
+        memory: "50 GB"
         disks: "local-disk 200 HDD"
   }
 
