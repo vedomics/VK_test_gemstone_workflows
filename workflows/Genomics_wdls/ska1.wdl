@@ -159,7 +159,7 @@ command <<<
         # Generate merged skf file
 
             skf_array=(~{sep=" " skf_files})
-            ska merge -o ~{skf_distances_named}_merged ~{skf_array[@]}
+            ska merge -o ~{skf_distances_named}_merged ${skf_array[@]}
 
 
 
