@@ -200,9 +200,6 @@ command <<<
 
         # Generate distances and clusters files
 
-           # skf_array=(~{sep=" " skf_files})
-            # for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
-            # ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named}
             ska distance -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named} ~{merged_skf}
 
 
