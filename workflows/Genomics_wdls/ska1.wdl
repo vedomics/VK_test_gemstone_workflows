@@ -87,7 +87,7 @@ if (generate_tree) {
   output {
 
     File skf_summary = SKA1_distance.summaries
-    Array[File] skf_merged = SKA1_merge.merged_skf
+    File skf_merged = SKA1_merge.merged_skf
     File? ska_vcfs = SKA1_annotate.vcfs
     File? ska_tree = build_tree.treefile
     File ska_distance = SKA1_distance.distance_matrix
@@ -167,7 +167,7 @@ command <<<
 
 
 output {
-        Array[File] merged_skf = glob("*merged_.skf")
+        File merged_skf = "~{skf_distances_named}_merged.skf"
   }
 
    runtime {
