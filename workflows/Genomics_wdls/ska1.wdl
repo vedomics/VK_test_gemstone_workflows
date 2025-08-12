@@ -167,7 +167,7 @@ command <<<
 
 
 output {
-        File merged_skf = "~{skf_distances_named}_merged.skf"
+        File merged_skf = glob("*.skf")
   }
 
    runtime {
