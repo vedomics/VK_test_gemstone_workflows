@@ -38,10 +38,18 @@ workflow SKA_1 {
     }
 }
 
+call SKA1_merge {
+  input:
+      skf_files = SKA1_build.skf_file,
+      skf_summary = SKA1_build.skf_summary,
+      strain = strain_name,
+      params = SKA1_build.build_parameters
+
+}
 
   call SKA1_distance {
     input:
-      skf_files = SKA1_build.skf_file,
+      merged_skf = SKA1_merge.merged_skf,
       skf_summary = SKA1_build.skf_summary,
       strain = strain_name,
       params = SKA1_build.build_parameters,
@@ -79,6 +87,7 @@ if (generate_tree) {
   output {
 
     File skf_summary = SKA1_distance.summaries
+    File skf_merged = SKA1_merge.merged_skf
     File? ska_vcfs = SKA1_annotate.vcfs
     File? ska_tree = build_tree.treefile
     File ska_distance = SKA1_distance.distance_matrix
@@ -131,10 +140,49 @@ task SKA1_build {
   }
 }
 
-task SKA1_distance {  
+
+task SKA1_merge {
   input {
     String strain
     Array[File] skf_files
+    Array[File] skf_summary
+    Array[String] params
+  }
+
+  String skf_filelist = "all_skf_files.txt"
+  String user_params = params[0]
+  String skf_distances_named = "~{strain}_~{user_params}"
+
+
+command <<<
+
+        # Generate merged skf file
+
+            skf_array=(~{sep=" " skf_files})
+            ska merge -o ~{skf_distances_named}_merged ~{skf_array[@]}
+
+
+
+  >>>
+
+
+output {
+        File merged_skf = "~{skf_distances_named}_merged.skf"
+  }
+
+   runtime {
+        docker:"staphb/ska:latest"
+        memory: "50 GB"
+        disks: "local-disk 50 HDD"
+  }
+
+}
+
+
+task SKA1_distance {  
+  input {
+    String strain
+    File merged_skf
     Array[File] skf_summary
     Array[String] params
     Float? identity_cutoff
@@ -152,9 +200,10 @@ command <<<
 
         # Generate distances and clusters files
 
-            skf_array=(~{sep=" " skf_files})
-            for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
-            ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named}
+           # skf_array=(~{sep=" " skf_files})
+            # for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
+            # ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named}
+            ska distance -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named} ~{merged_skf}
 
 
         # Generate summaries tarball
