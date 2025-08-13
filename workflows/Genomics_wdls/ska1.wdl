@@ -38,18 +38,10 @@ workflow SKA_1 {
     }
 }
 
-call SKA1_merge {
-  input:
-      skf_files = SKA1_build.skf_file,
-      skf_summary = SKA1_build.skf_summary,
-      strain = strain_name,
-      params = SKA1_build.build_parameters
-
-}
 
   call SKA1_distance {
     input:
-      merged_skf = SKA1_merge.merged_skf,
+      skf_files = SKA1_build.skf_file,
       skf_summary = SKA1_build.skf_summary,
       strain = strain_name,
       params = SKA1_build.build_parameters,
@@ -142,47 +134,13 @@ task SKA1_build {
 }
 
 
-task SKA1_merge {
-  input {
-    String strain
-    Array[File] skf_files
-    Array[File] skf_summary
-    Array[String] params
-  }
-
-  String skf_filelist = "all_skf_files.txt"
-  String user_params = params[0]
-  String skf_distances_named = "~{strain}_~{user_params}"
-
-
-command <<<
-
-        # Generate merged skf file
-
-            skf_array=(~{sep=" " skf_files})
-            ska merge -o ~{skf_distances_named}_merged ${skf_array[@]}
-
-  >>>
-
-
-output {
-        File merged_skf = "~{skf_distances_named}_merged.skf"
-  }
-
-   runtime {
-        docker:"staphb/ska:latest"
-        memory: "80 GB"
-        disks: "local-disk 50 HDD"
-  }
-
-}
-
 
 task SKA1_distance {  
   input {
     String strain
     File merged_skf
     Array[File] skf_summary
+    Array[File] skf_files
     Array[String] params
     Float? identity_cutoff
     Int? snp_cutoff
@@ -199,7 +157,9 @@ command <<<
 
         # Generate distances and clusters files
 
-            ska distance -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named} ~{merged_skf}
+            skf_array=(~{sep=" " skf_files})
+            for i in ${skf_array[@]}; do echo $i >> ~{skf_filelist}; done
+            ska distance -f ~{skf_filelist} -i ~{identity_cutoff_actual} -s ~{snp_cutoff_actual} -o ~{skf_distances_named}
 
 
         # Generate summaries tarball
@@ -222,7 +182,7 @@ output {
 
    runtime {
         docker:"staphb/ska:latest"
-        memory: "50 GB"
+        memory: "150 GB"
         disks: "local-disk 200 HDD"
   }
 
