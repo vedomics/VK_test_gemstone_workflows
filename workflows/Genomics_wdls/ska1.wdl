@@ -137,6 +137,7 @@ task SKA1_build {
       memory: "8 GB"
       preemptible: 0
       maxRetries: 1
+      cpu: 4
   }
 }
 
