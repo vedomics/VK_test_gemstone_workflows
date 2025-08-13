@@ -137,7 +137,6 @@ task SKA1_build {
 task SKA1_distance {  
   input {
     String strain
-    File merged_skf
     Array[File] skf_summary
     Array[File] skf_files
     Array[String] params
