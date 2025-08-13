@@ -134,7 +134,7 @@ task SKA1_build {
 
   runtime {
       docker: "staphb/ska:latest"
-      mem: "2 GB"
+      memory: "2 GB"
       preemptible: 0
       maxRetries: 1
   }
@@ -161,8 +161,6 @@ command <<<
             skf_array=(~{sep=" " skf_files})
             ska merge -o ~{skf_distances_named}_merged ${skf_array[@]}
 
-
-
   >>>
 
 
@@ -172,7 +170,7 @@ output {
 
    runtime {
         docker:"staphb/ska:latest"
-        memory: "50 GB"
+        memory: "80 GB"
         disks: "local-disk 50 HDD"
   }
 
