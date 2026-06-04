@@ -70,7 +70,7 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
-  - name: ska_plasmid_masked.wdl
+  - name: ska_plasmid_masked
     subclass: WDL
     primaryDescriptorPath: /workflows/Genomics_wdls/ska_plasmid_masked.wdl  # absolute path
     readMePath: /workflows/Genomics_wdls/README.md # absolute path
