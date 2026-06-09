@@ -84,3 +84,10 @@ workflows:
     authors:
       - name: VK
         email: vkhadka@broadinstitute.org
+  - name: ska_plasmid_masked_v3
+    subclass: WDL
+    primaryDescriptorPath: /workflows/Genomics_wdls/ska_plasmid_masked_v3.wdl  # absolute path
+    readMePath: /workflows/Genomics_wdls/README.md # absolute path
+    authors:
+      - name: VK
+        email: vkhadka@broadinstitute.org
