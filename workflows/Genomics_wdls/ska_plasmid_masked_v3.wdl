@@ -10,7 +10,7 @@ workflow SKA_plasmid_masked_v3 {
   input {
     Array[File] read1_clean
     Array[File] read2_clean
-    Array[File] plasmid_fastas
+    Array[File?] plasmid_fastas
     Array[String] samplename
     String strain_name
     Float? minor_allele_freq
@@ -37,17 +37,30 @@ workflow SKA_plasmid_masked_v3 {
         total_cutoff = total_Coverage_cutoff
     }
 
-    # Extract plasmid fastas from tar.gz
-    call extract_plasmid_fastas {
-      input:
-        plasmid_tarball = plasmid_fastas[i],
-        sample_id = samplename[i]
+    # Extract plasmid fastas from tar.gz if provided
+    if (defined(plasmid_fastas[i])) {
+      call extract_plasmid_fastas {
+        input:
+          plasmid_tarball = select_first([plasmid_fastas[i]]),
+          sample_id = samplename[i]
+      }
     }
+
+    # Handle case where no plasmid file provided
+    if (!defined(plasmid_fastas[i])) {
+      call create_empty_plasmid_fasta {
+        input:
+          sample_id = samplename[i]
+      }
+    }
+
+    # Select the plasmid fasta from either extraction or empty file creation
+    File resolved_plasmid_fasta = select_first([extract_plasmid_fastas.plasmid_fasta, create_empty_plasmid_fasta.empty_fasta])
 
     # Convert plasmid fasta to skf
     call plasmid_to_skf {
       input:
-        plasmid_fasta = extract_plasmid_fastas.plasmid_fasta,
+        plasmid_fasta = resolved_plasmid_fasta,
         sample_id = samplename[i]
     }
 
@@ -164,7 +177,7 @@ task extract_plasmid_fastas {
       PLASMID_FILE=$(cat found_file.txt)
       cp "$PLASMID_FILE" ~{sample_id}_plasmids.fasta
     else
-      # Create empty file if no plasmids found
+      # Create empty file if no plasmids found in tarball
       touch ~{sample_id}_plasmids.fasta
     fi
   >>>
@@ -176,6 +189,27 @@ task extract_plasmid_fastas {
   runtime {
     docker: "ubuntu:20.04"
     memory: "2 GB"
+    cpu: 1
+    preemptible: 0
+  }
+}
+
+task create_empty_plasmid_fasta {
+  input {
+    String sample_id
+  }
+
+  command <<<
+    touch ~{sample_id}_plasmids.fasta
+  >>>
+
+  output {
+    File empty_fasta = "~{sample_id}_plasmids.fasta"
+  }
+
+  runtime {
+    docker: "ubuntu:20.04"
+    memory: "1 GB"
     cpu: 1
     preemptible: 0
   }
