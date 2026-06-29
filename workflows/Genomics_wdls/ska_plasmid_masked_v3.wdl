@@ -1,6 +1,6 @@
 version 1.0
 
-workflow SKA_plasmid_masked_v3 {
+workflow SKA_plasmid_masked {
   meta {
     author: "Veda Khadka & Claude Code"
     email: "vkhadka@broadinstitute.org"
@@ -10,7 +10,7 @@ workflow SKA_plasmid_masked_v3 {
   input {
     Array[File] read1_clean
     Array[File] read2_clean
-    File plasmid_fastas
+    Array[File?] plasmid_fastas
     Array[String] samplename
     String strain_name
     Float? minor_allele_freq
@@ -25,13 +25,6 @@ workflow SKA_plasmid_masked_v3 {
     Float? min_kmer_freq = 0.9
   }
 
-  # Extract plasmids from single tarball first
-  call extract_all_plasmids {
-    input:
-      plasmid_tarball = plasmid_fastas,
-      sample_names = samplename
-  }
-
   scatter (i in range(length(samplename))) {
     call SKA1_build {
       input:
@@ -44,10 +37,30 @@ workflow SKA_plasmid_masked_v3 {
         total_cutoff = total_Coverage_cutoff
     }
 
-    # Convert plasmid fasta to skf for this sample
+    # Extract plasmid fastas from tar.gz if provided
+    if (defined(plasmid_fastas[i])) {
+      call extract_plasmid_fastas {
+        input:
+          plasmid_tarball = select_first([plasmid_fastas[i]]),
+          sample_id = samplename[i]
+      }
+    }
+
+    # Handle case where no plasmid file provided
+    if (!defined(plasmid_fastas[i])) {
+      call create_empty_plasmid_fasta {
+        input:
+          sample_id = samplename[i]
+      }
+    }
+
+    # Select the plasmid fasta from either extraction or empty file creation
+    File resolved_plasmid_fasta = select_first([extract_plasmid_fastas.plasmid_fasta, create_empty_plasmid_fasta.empty_fasta])
+
+    # Convert plasmid fasta to skf
     call plasmid_to_skf {
       input:
-        plasmid_fasta = extract_all_plasmids.sample_plasmid_fastas[i],
+        plasmid_fasta = resolved_plasmid_fasta,
         sample_id = samplename[i]
     }
 
@@ -146,97 +159,57 @@ task SKA1_build {
   }
 }
 
-task extract_all_plasmids {
+task extract_plasmid_fastas {
   input {
     File plasmid_tarball
-    Array[String] sample_names
+    String sample_id
   }
 
   command <<<
     # Extract the tar.gz file
     tar -xzf ~{plasmid_tarball}
 
-    # Find the combined plasmid fasta file
-    PLASMID_FILE=$(find . -name "plasmids.fasta" | head -1)
+    # Find the plasmid fasta file (should be mob_recon/plasmids.fasta)
+    find . -name "plasmids.fasta" -o -name "plasmid*.fasta" | head -1 > found_file.txt
 
-    if [ -z "$PLASMID_FILE" ]; then
-      echo "ERROR: plasmids.fasta not found in tarball"
-      # Create empty files for all samples
-      while IFS= read -r sample; do
-        touch "${sample}_plasmids.fasta"
-      done < ~{write_lines(sample_names)}
+    # Check if file was found
+    if [ -s found_file.txt ]; then
+      PLASMID_FILE=$(cat found_file.txt)
+      cp "$PLASMID_FILE" ~{sample_id}_plasmids.fasta
     else
-      # Split plasmids by sample ID (extracted from header suffix plasmid_SAMPLEID)
-      python3 <<PYTHON
-import re
-import sys
-
-# Read sample names
-with open('~{write_lines(sample_names)}', 'r') as f:
-    samples = [line.strip() for line in f]
-
-# Create empty fasta files for all samples first
-sample_files = {}
-for sample in samples:
-    fname = f"{sample}_plasmids.fasta"
-    sample_files[sample] = open(fname, 'w')
-
-# Parse the combined plasmid fasta and assign to samples
-current_sample = None
-current_header = None
-current_seq = []
-
-with open("$PLASMID_FILE", 'r') as f:
-    for line in f:
-        line = line.rstrip()
-        if line.startswith('>'):
-            # Write previous sequence if exists
-            if current_sample and current_header:
-                sample_files[current_sample].write(current_header + '\\n')
-                sample_files[current_sample].write(''.join(current_seq) + '\\n')
-
-            # Extract sample ID from header (looks for plasmid_SAMPLEID at end)
-            match = re.search(r'plasmid_([A-Za-z0-9_-]+)', line)
-            if match:
-                sample_id = match.group(1)
-                if sample_id in sample_files:
-                    current_sample = sample_id
-                    current_header = line
-                    current_seq = []
-                else:
-                    current_sample = None
-            else:
-                current_sample = None
-        else:
-            if current_sample:
-                current_seq.append(line)
-
-    # Write last sequence
-    if current_sample and current_header:
-        sample_files[current_sample].write(current_header + '\\n')
-        sample_files[current_sample].write(''.join(current_seq) + '\\n')
-
-# Close all files
-for f in sample_files.values():
-    f.close()
-PYTHON
+      # Create empty file if no plasmids found in tarball
+      touch ~{sample_id}_plasmids.fasta
     fi
-
-    # Verify all sample files exist (create empty if missing)
-    while IFS= read -r sample; do
-      if [ ! -f "${sample}_plasmids.fasta" ]; then
-        touch "${sample}_plasmids.fasta"
-      fi
-    done < ~{write_lines(sample_names)}
   >>>
 
   output {
-    Array[File] sample_plasmid_fastas = glob("*_plasmids.fasta")
+    File plasmid_fasta = "~{sample_id}_plasmids.fasta"
   }
 
   runtime {
-    docker: "python:3.9-slim"
-    memory: "4 GB"
+    docker: "ubuntu:20.04"
+    memory: "2 GB"
+    cpu: 1
+    preemptible: 0
+  }
+}
+
+task create_empty_plasmid_fasta {
+  input {
+    String sample_id
+  }
+
+  command <<<
+    touch ~{sample_id}_plasmids.fasta
+  >>>
+
+  output {
+    File empty_fasta = "~{sample_id}_plasmids.fasta"
+  }
+
+  runtime {
+    docker: "ubuntu:20.04"
+    memory: "1 GB"
     cpu: 1
     preemptible: 0
   }
